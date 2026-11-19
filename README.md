@@ -1,31 +1,33 @@
-# Shift Coverage Agent · Concept Demo
+# Shift Coverage Agent · Concept Demos
 
-Interactive sales-pitch prototype with two themes:
+Static site, no build step. Open `index.html` for the version picker.
 
-- **Casino** (`#casino`): views float center and drop onto a 3D felt table; chip-tray navigation.
-- **Healthcare** (`#healthcare`): top nav drives a 3D carousel of views.
-
-Single self-contained `index.html`. No build step, no dependencies (Google Fonts load from the web).
+| Folder | What it is |
+|---|---|
+| `v2-resort/` | **V2 · The Resort.** Game-like isometric resort hub with a mission board of proposals, conflicts and approvals. Drill into each department: Casino Floor (felt table, embeds `classic/`), Hotel (elevator), Ember & Oak (fine dining), Resort Shop (storefront), Back of House (ops console). |
+| `v1-pulse/` | **V1 Draft A · Resort Pulse.** Abstract dark glass. Departments as lanes of light across Saturday; gaps crack the line. |
+| `v1-orbit/` | **V1 Draft B · Orbit.** Agent at the center, departments in orbit sized by headcount. |
+| `classic/` | **Round 1.** Casino-only and Healthcare themes. `#casino`, `#healthcare`. `#embed` is used by V2. |
 
 ## Run locally
-Open `index.html` in Chrome or Safari, or serve the folder:
+Serve the folder (the casino department uses an iframe, so a local server is best):
 
 ```
 npx serve .
 ```
 
 ## Deploy on GitHub Pages
-1. Push this folder to a repo (files at the repo root).
-2. Settings → Pages → Deploy from branch → `main` / root.
-3. Open `https://<org>.github.io/<repo>/#casino` or `#healthcare`.
+Push the contents to a repo root, then Settings → Pages → Deploy from branch → `main` / root.
 
 ## Password
-The demo opens behind a password prompt (`PlanA`). It is a client-side gate: it keeps casual visitors out, but anyone who reads the page source can get past it. For real protection, host it behind an auth layer (Cloudflare Access, Vercel/Netlify password protection, or a private repo + private Pages on GitHub Enterprise).
+Every page opens behind a shared prompt (`PlanA`), remembered for the browser tab. It's client-side only: it keeps casual visitors out, but anyone reading the source can get past it. For real protection put the site behind Cloudflare Access, Netlify/Vercel password protection, or private Pages.
 
-To change the password, replace `PW_HASH` in `index.html` with the SHA-256 hex of the new password and update the fallback string next to it.
+To change it, replace the hash in `gate.js` (SHA-256 hex of the new password) and the fallback string next to it. `classic/index.html` has its own copy of the same check.
 
-## Demo tips
-- **Reset demo** (top right) clears the agent flow before each pitch.
-- Arrow keys move between views.
-- Designed at 1600×900 and scaled to fit; best on a laptop or projector.
-- All names and organizations are fictional.
+## Demo script (V2)
+1. Land on the resort. The agent and the "Needs you" board explain fight night.
+2. Hover pins, click **Show me on the map**.
+3. Open a department or two (Hotel elevator, Ember & Oak's Pass, Casino Floor).
+4. Back on the resort, **Approve the whole plan** and watch staff move across departments.
+
+Reload the page to reset. All names and organizations are fictional.

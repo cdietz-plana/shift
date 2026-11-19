@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shift Coverage · V1 Draft A · Resort Pulse</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#05070c}
+body{font-family:Inter,system-ui,sans-serif;color:#e8ecf5}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+#app{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform:translate(-50%,-50%) scale(var(--s,1))}
+.aur{position:absolute;inset:-100px;filter:blur(60px);opacity:.75;pointer-events:none}
+.aur i{position:absolute;border-radius:50%;animation:drift 22s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(80px,40px) scale(1.15)}}
+.glass{background:linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 20px 50px rgba(0,0,0,.35)}
+.top{position:absolute;left:40px;right:40px;top:22px;height:52px;display:flex;align-items:center;gap:18px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo .m{width:38px;height:38px;border-radius:50%;background:conic-gradient(#f3d77a,#7c5cff,#22d3ee,#f3d77a);display:grid;place-items:center}
+.logo .m i{width:28px;height:28px;border-radius:50%;background:#0b0f1a;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:800}
+.logo b{font-family:Manrope;font-size:16px}.logo small{display:block;font-size:11.5px;opacity:.55}
+.cmd{flex:0 0 560px;margin:0 auto;height:46px;border-radius:999px;display:flex;align-items:center;gap:12px;padding:0 8px 0 18px}
+.cmd input{flex:1;background:none;border:0;outline:0;color:#fff;font-size:14px}
+.cmd input::placeholder{color:rgba(232,236,245,.45)}
+.cmd kbd{font-family:'JetBrains Mono';font-size:11px;padding:4px 8px;border-radius:8px;background:rgba(255,255,255,.08);opacity:.7}
+.cmd .orb{width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#c4b5fd,#7c5cff 60%,#3b1d9a);box-shadow:0 0 18px rgba(124,92,255,.7);animation:breathe 3s ease-in-out infinite}
+@keyframes breathe{50%{box-shadow:0 0 30px rgba(124,92,255,1)}}
+.user{display:flex;align-items:center;gap:10px;font-size:13px}
+.user .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7c5cff,#22d3ee);display:grid;place-items:center;font-weight:800;font-size:12px}
+.user small{display:block;opacity:.55;font-size:11px}
+.event{font-size:12px;font-weight:700;padding:8px 14px;border-radius:999px;background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:#ffb3c1}
+.stats{position:absolute;left:40px;top:100px;width:1040px;display:flex;gap:14px}
+.stat{flex:1;border-radius:18px;padding:16px 18px}
+.stat small{font-size:11px;letter-spacing:1px;text-transform:uppercase;opacity:.55}
+.stat b{display:block;font-family:Manrope;font-weight:800;font-size:32px;margin-top:4px;letter-spacing:-.5px;transition:color .4s}
+.stat em{font-style:normal;font-size:12px;opacity:.6}
+.pulse{position:absolute;left:40px;top:206px;width:1040px;bottom:30px;border-radius:22px;padding:16px 18px 10px}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.ph h3{font-family:Manrope;font-size:17px}.ph p{font-size:12px;opacity:.55}
+.axis{display:flex;margin-left:230px;font-size:10.5px;opacity:.45;font-family:'JetBrains Mono';position:relative;height:16px}
+.axis span{position:absolute;transform:translateX(-50%)}
+.lanes{position:relative;height:calc(100% - 50px);overflow:hidden}
+.lane{display:flex;align-items:center;height:40px;border-radius:12px;cursor:pointer;transition:background .25s,height .45s cubic-bezier(.3,1,.3,1);position:relative;overflow:hidden}
+.lane:hover{background:rgba(255,255,255,.035)}
+.lane.open{height:106px;background:rgba(255,255,255,.05);align-items:flex-start;padding-top:6px}
+.lab{flex:0 0 230px;display:flex;align-items:center;gap:10px;padding-left:6px}
+.lab .ic{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:10.5px;font-weight:800;color:#05070c}
+.lab>div{min-width:0}.lab b{font-size:13px;display:block;white-space:nowrap}.lab small{font-size:10.5px;opacity:.5;white-space:nowrap}
+.lab .pc{margin-left:auto;margin-right:12px;font-family:'JetBrains Mono';font-size:11.5px;font-weight:700}
+.lane svg{flex:1;height:40px;overflow:visible}
+.det{position:absolute;left:236px;right:10px;top:44px;display:flex;gap:10px;opacity:0;transition:opacity .3s .1s}
+.lane.open .det{opacity:1}
+.role{flex:1;border-radius:12px;padding:9px 12px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.07);font-size:12px}
+.role b{display:block;font-size:15px;font-family:Manrope;margin-top:2px}
+.event-line{position:absolute;top:0;bottom:0;width:0;border-left:1px dashed rgba(255,77,109,.6);pointer-events:none}
+.event-line span{position:absolute;top:-2px;left:6px;font-size:10px;font-weight:700;color:#ff8fa3;white-space:nowrap}
+.crack{animation:crk 1.4s ease-in-out infinite}
+@keyframes crk{50%{opacity:.35}}
+.seal{animation:seal 1.2s ease-out}
+@keyframes seal{0%{filter:brightness(3) drop-shadow(0 0 12px #fff)}100%{filter:none}}
+.side{position:absolute;right:40px;top:100px;width:460px;bottom:30px;display:flex;flex-direction:column}
+.side .ph{padding:0 4px}
+.allBtn{font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:999px;background:linear-gradient(135deg,#7c5cff,#22d3ee);color:#fff;box-shadow:0 8px 20px rgba(124,92,255,.35)}
+.cards{position:relative;flex:1;margin-top:10px;perspective:1200px}
+.pcard{position:absolute;left:0;right:0;border-radius:18px;background:linear-gradient(180deg,rgba(28,32,48,.96),rgba(16,19,30,.96))!important;padding:16px 18px 16px 18px;transition:transform .6s cubic-bezier(.3,1.2,.4,1),opacity .5s,top .6s cubic-bezier(.3,1,.3,1);cursor:pointer}
+.pcard .suit{position:absolute;right:16px;top:12px;font-size:15px;opacity:.5}
+.pcard .suit.r{color:#ff6b81}
+.pcard .dept{font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.pcard h4{font-family:Manrope;font-size:15.5px;margin-top:4px;line-height:1.3;padding-right:20px}
+.pcard p{font-size:12.5px;opacity:.65;margin-top:6px;line-height:1.45}
+.pcard .acts{display:flex;gap:8px;margin-top:12px;align-items:center}
+.pcard .acts button{font-size:12px;font-weight:700;padding:8px 13px;border-radius:10px}
+.pcard .ok{background:#fff;color:#0b0f1a}
+.pcard .rv{background:rgba(255,255,255,.08)}
+.pcard .tok{margin-left:auto;display:flex;gap:4px}
+.tk{width:20px;height:20px;border-radius:50%;background:repeating-conic-gradient(var(--c) 0 30deg,rgba(255,255,255,.85) 30deg 40deg,var(--c) 40deg 60deg);box-shadow:0 2px 6px rgba(0,0,0,.4);position:relative}
+.tk::after{content:'';position:absolute;inset:4px;border-radius:50%;background:var(--c)}
+.pcard.gone{transform:translateX(120%) rotate(12deg);opacity:0;pointer-events:none}
+.pcard.hl{box-shadow:0 0 0 2px #fff,0 20px 50px rgba(0,0,0,.4)}
+.done{position:absolute;inset:0;display:grid;place-items:center;text-align:center;opacity:0;transition:opacity .6s;pointer-events:none}
+.done.show{opacity:1}
+.done b{font-family:Manrope;font-size:26px;display:block}
+.toast{position:absolute;left:50%;top:84px;transform:translate(-50%,-10px);opacity:0;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;transition:all .4s;pointer-events:none;z-index:10}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.draft{position:absolute;left:40px;bottom:8px;font-size:11px;opacity:.4}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="aur"><i style="left:0;top:0;width:700px;height:500px;background:#3b1d9a"></i><i style="right:0;top:200px;width:600px;height:600px;background:#0e5a6e;animation-delay:-8s"></i><i style="left:500px;bottom:-100px;width:600px;height:400px;background:#5a4410;opacity:.6;animation-delay:-14s"></i></div>
+  <div class="top">
+    <div class="logo"><div class="m"><i>SC</i></div><div><b>Shift Coverage</b><small>Example Resort &amp; Casino</small></div></div>
+    <form class="cmd glass" id="cmd"><div class="orb"></div><input id="q" placeholder="Ask the agent: “cover Saturday”, “who’s near overtime”, “move a server”"><kbd>⌘K</kbd></form>
+    <span class="event">Sat Nov 21 · Fight Night</span>
+    <div class="user"><div class="av">MR</div><div><b>Maya Rivers</b><small>VP, Resort Operations</small></div></div>
+  </div>
+  <div class="stats" id="stats"></div>
+  <div class="pulse glass"><div class="ph"><div><h3>Resort pulse · Saturday</h3><p>Every department across the day. Thickness is demand. Cracks are uncovered hours.</p></div><span style="font-size:12px;opacity:.6">Click a lane for detail</span></div>
+    <div class="axis" id="axis"></div><div class="lanes" id="lanes"></div></div>
+  <div class="side"><div class="ph"><div><h3>Proposed resolutions</h3><p>The agent checked licenses, hours and union rules</p></div><button class="allBtn" id="all">Approve all</button></div>
+    <div class="cards" id="cards"><div class="done" id="done"><div><b>Saturday is covered</b><span style="opacity:.6;font-size:13px">Every lane sealed. Offers are going out.</span></div></div></div></div>
+  <div class="toast glass" id="toast"></div>
+  <div class="draft">V1 · Draft A · Resort Pulse · concept</div>
+</div>
+<script src="../gate.js"></script>
+<script>
+const DEPTS=[
+ {k:'casino',n:'Casino Floor',s:'Table games',hc:142,c:'#f3d77a',cv:'night',g:[[14,20,2]],roles:[['Dealers',96,'2 short'],['Floor supervisors',22,'OK'],['Pit managers',8,'OK']]},
+ {k:'slots',n:'Slot Operations',s:'Techs & attendants',hc:38,c:'#fbbf24',cv:'night',g:[],roles:[['Slot techs',14,'OK'],['Attendants',24,'OK']]},
+ {k:'front',n:'Hotel Front Desk',s:'Check-in & concierge',hc:46,c:'#a78bfa',cv:'checkin',g:[[8,12,3]],roles:[['Desk agents',28,'3 short 2 to 6 PM'],['Concierge',10,'OK'],['PBX',8,'OK']]},
+ {k:'hk',n:'Housekeeping',s:'Rooms & public areas',hc:210,c:'#c4b5fd',cv:'day',g:[],roles:[['Room attendants',168,'OK'],['Inspectors',22,'OK'],['House porters',20,'OK']]},
+ {k:'valet',n:'Bell & Valet',s:'Arrivals',hc:54,c:'#22d3ee',cv:'event',g:[[11,18,6]],roles:[['Valet attendants',32,'6 short'],['Bell staff',18,'OK'],['Dispatch',4,'OK']]},
+ {k:'sec',n:'Security',s:'Arena & property',hc:120,c:'#60a5fa',cv:'event',g:[[10,19,8]],roles:[['Officers',96,'8 short arena entry'],['Supervisors',16,'OK'],['Dispatch',8,'OK']]},
+ {k:'steak',n:'Ember & Oak',s:'Steakhouse',hc:34,c:'#fb923c',cv:'dinner',g:[[11,17,2]],roles:[['Servers',14,'2 short 5 to 11 PM'],['Bartenders',6,'OK'],['Hosts',4,'OK']]},
+ {k:'market',n:'The Market',s:'Buffet',hc:60,c:'#f97316',cv:'meals',g:[],roles:[['Attendants',38,'OK'],['Cooks',22,'OK']]},
+ {k:'shop',n:'Resort Shop',s:'Retail',hc:18,c:'#f472b6',cv:'retail',g:[[12,16,1]],roles:[['Sales associates',14,'1 short 6 to 10 PM'],['Leads',4,'OK']]},
+ {k:'it',n:'IT',s:'Systems & on-call',hc:22,c:'#34d399',cv:'flat',g:[],roles:[['On-call engineers',6,'OK'],['Help desk',16,'OK']]},
+ {k:'evs',n:'Facilities & EVS',s:'Cleaning & engineering',hc:85,c:'#2dd4bf',cv:'flat',g:[[18,22,4]],roles:[['EVS crew',60,'4 short arena teardown'],['Engineers',25,'OK']]},
+ {k:'grounds',n:'Grounds & Pool',s:'Outdoor',hc:30,c:'#4ade80',cv:'day',g:[],roles:[['Groundskeepers',18,'OK'],['Pool attendants',12,'OK']]},
+ {k:'mkt',n:'Marketing & Events',s:'VIP & promotions',hc:16,c:'#e879f9',cv:'event',g:[[9,13,2]],roles:[['VIP hosts',10,'2 short 3 to 7 PM'],['Promotions',6,'OK']]}
+];
+const PROPS=[
+ {d:'sec',t:'Cover arena entry with 5 internal officers and 3 contract officers',p:'Internal officers stay under 12 hrs and keep 10 hrs rest. Contract officers come from the approved vendor with valid guard cards.',tok:8},
+ {d:'valet',t:'Move 4 cross-trained bell staff to valet, offer 2 on-call shifts',p:'Bell desk stays at minimum. All 4 hold valet driving clearance.',tok:6},
+ {d:'casino',t:'Riley Chen and Morgan Reyes to High Limit Baccarat',p:'Both certified, free tonight, no overtime. Gaming licenses current.',tok:2},
+ {d:'steak',t:'Jane Doe from Front Desk and Sam Patel to Ember & Oak',p:'Jane is cross-trained in F&B with a current food handler card. Union seniority respected.',tok:2},
+ {d:'front',t:'Shift 2 concierge agents to the desk from 2 to 6 PM',p:'Covers the arrival wave. Concierge keeps one agent on the floor.',tok:2},
+ {d:'evs',t:'Offer arena teardown to 4 overnight EVS crew',p:'Starts at midnight. Overnight crew is under weekly hours.',tok:4},
+ {d:'mkt',t:'2 Players Club reps to VIP check-in',p:'Same CRM access. Back on Players Club by 7 PM.',tok:2},
+ {d:'shop',t:'Extend one shop associate by 2 hours',p:'Stays within 10 hrs for the day.',tok:1}
+];
+const SUITS=['♠','♥','♦','♣'];
+const resolved=new Set();
+const curve=(cv,h)=>{const t=(h+6)%24;
+  return {night:t>=18||t<4?1:t<10?.25:.55, checkin:t>=13&&t<19?1:t>=7&&t<12?.6:.3, day:t>=8&&t<17?1:.25, event:t>=16||t<1?1:t>=12?.5:.2,
+    dinner:t>=17&&t<23?1:t>=11&&t<15?.5:.1, meals:[7,8,12,13,18,19,20].includes(t)?1:.4, retail:t>=10&&t<23?.75:.1, flat:.5}[cv]};
+const TOTAL=3400;
+function shortHours(){return DEPTS.reduce((a,d)=>a+(resolved.has(d.k)?0:d.g.reduce((b,g)=>b+(g[1]-g[0])*g[2],0)),0)}
+function openShifts(){return DEPTS.reduce((a,d)=>a+(resolved.has(d.k)?0:d.g.reduce((b,g)=>b+g[2],0)),0)}
+function cov(){return Math.round((1-shortHours()/TOTAL)*1000)/10}
+function deptCov(d){if(resolved.has(d.k)||!d.g.length)return 100;const sh=d.g.reduce((b,g)=>b+(g[1]-g[0])*g[2],0);return Math.round((1-sh/(d.hc*8*.9))*1000)/10}
+function stats(){
+  const p=PROPS.filter(x=>!resolved.has(x.d)).length;
+  document.getElementById('stats').innerHTML=[['Saturday coverage',cov()+'%','of required hours',cov()>=99.9?'#5eead4':'#fff'],['Open shifts',openShifts(),'across '+DEPTS.filter(d=>d.g.length&&!resolved.has(d.k)).length+' departments',openShifts()?'#ffb3c1':'#5eead4'],['Proposals ready',p,'nothing sent until you approve','#fff'],['Staff scheduled',(875+(36-openShifts())),'of 911 needed','#fff']]
+   .map(s=>`<div class="stat glass"><small>${s[0]}</small><b style="color:${s[3]}">${s[1]}</b><em>${s[2]}</em></div>`).join('');
+}
+const W=790;
+function laneSvg(d){
+  const X=h=>h/24*W, H=h=>3+11*curve(d.cv,h);
+  const gaps=resolved.has(d.k)?[]:d.g;
+  const inGap=h=>gaps.some(g=>h>=g[0]&&h<g[1]);
+  let segs=[],cur=null;
+  for(let h=0;h<=24;h+=.25){const gp=inGap(h)&&h<24;if(!gp){if(!cur){cur=[]};cur.push(h)}else if(cur){segs.push(cur);cur=null}}
+  if(cur)segs.push(cur);
+  const rib=segs.filter(s=>s.length>1).map(s=>{const top=s.map(h=>`${X(h).toFixed(1)},${(22-H(h)).toFixed(1)}`),bot=s.slice().reverse().map(h=>`${X(h).toFixed(1)},${(22+H(h)).toFixed(1)}`);return `<polygon points="${top.concat(bot).join(' ')}" fill="url(#g-${d.k})"/>`}).join('');
+  const cracks=gaps.map(g=>{let p='';const x0=X(g[0]),x1=X(g[1]);const n=Math.max(4,Math.round((x1-x0)/10));for(let i=0;i<=n;i++){p+=`${(x0+(x1-x0)*i/n).toFixed(1)},${22+(i%2?-6:6)} `}
+    return `<polyline class="crack" points="${p}" fill="none" stroke="#ff4d6d" stroke-width="1.6" style="filter:drop-shadow(0 0 4px #ff4d6d)"/>
+     <g transform="translate(${(x0+x1)/2},22)"><circle r="11" fill="#1a0b12" stroke="#ff4d6d" stroke-width="1.5" stroke-dasharray="3 2.4"/><text y="3.5" text-anchor="middle" font-size="9.5" font-weight="800" fill="#ffb3c1" font-family="JetBrains Mono">−${g[2]}</text></g>`}).join('');
+  return `<svg viewBox="0 0 ${W} 44" preserveAspectRatio="none"><defs><linearGradient id="g-${d.k}" x1="0" x2="1"><stop offset="0" stop-color="${d.c}" stop-opacity=".35"/><stop offset=".5" stop-color="${d.c}" stop-opacity=".95"/><stop offset="1" stop-color="${d.c}" stop-opacity=".5"/></linearGradient></defs>
+   <line x1="0" x2="${W}" y1="22" y2="22" stroke="rgba(255,255,255,.05)"/>${rib}${cracks}</svg>`;
+}
+function lanes(){
+  const L=document.getElementById('lanes');
+  L.innerHTML=DEPTS.map(d=>{const c=deptCov(d);return `<div class="lane" data-k="${d.k}"><div class="lab"><div class="ic" style="background:${d.c}">${d.n.split(' ').map(w=>w[0]).join('').slice(0,2)}</div><div><b>${d.n}</b><small>${d.s} · ${d.hc}</small></div><span class="pc" style="color:${c>=99.9?'#5eead4':c>=97?'#fcd34d':'#ff8fa3'}">${c>=99.9?'100%':c+'%'}</span></div>${laneSvg(d)}
+   <div class="det">${d.roles.map(r=>`<div class="role"><span style="opacity:.6">${r[0]}</span><b>${r[1]}</b><span style="font-size:11px;color:${r[2]==='OK'||resolved.has(d.k)?'#5eead4':'#ffb3c1'}">${resolved.has(d.k)?'Covered':r[2]}</span></div>`).join('')}</div></div>`}).join('')+
+   `<div class="event-line" style="left:${230+13/24*W}px"><span>Doors 7 PM</span></div>`;
+  document.querySelectorAll('.lane').forEach(l=>l.onclick=()=>{const was=l.classList.contains('open');document.querySelectorAll('.lane').forEach(x=>x.classList.remove('open'));if(!was)l.classList.add('open');highlight(l.dataset.k)});
+}
+function axis(){const a=document.getElementById('axis');a.innerHTML=[0,3,6,9,12,15,18,21,24].map(h=>{const t=(h+6)%24;return `<span style="left:${h/24*W}px">${t===0?'12a':t===12?'12p':t<12?t+'a':(t-12)+'p'}</span>`}).join('')}
+function cards(){
+  const C=document.getElementById('cards');[...C.querySelectorAll('.pcard')].forEach(x=>x.remove());
+  PROPS.forEach((p,i)=>{const d=DEPTS.find(x=>x.k===p.d);const el=document.createElement('div');el.className='pcard glass';el.dataset.d=p.d;
+    el.innerHTML=`<span class="suit ${i%4===1||i%4===2?'r':''}">${SUITS[i%4]}</span><div class="dept" style="color:${d.c}">${d.n}</div><h4>${p.t}</h4><p>${p.p}</p>
+     <div class="acts"><button class="ok">Approve</button><button class="rv">Adjust</button><div class="tok">${Array.from({length:Math.min(p.tok,6)},()=>`<span class="tk" style="--c:${d.c}"></span>`).join('')}${p.tok>6?`<span style="font-size:11px;opacity:.6;align-self:center">+${p.tok-6}</span>`:''}</div></div>`;
+    el.querySelector('.ok').onclick=e=>{e.stopPropagation();approve(p.d)};
+    el.querySelector('.rv').onclick=e=>{e.stopPropagation();toast('Adjusting opens the full plan with alternates (draft)')};
+    el.onclick=()=>{const l=document.querySelector(`.lane[data-k="${p.d}"]`);document.querySelectorAll('.lane').forEach(x=>x.classList.remove('open'));l.classList.add('open');highlight(p.d)};
+    C.appendChild(el)});
+  stackCards();
+}
+function stackCards(){
+  const live=[...document.querySelectorAll('.pcard')].filter(c=>!resolved.has(c.dataset.d));
+  live.forEach((c,i)=>{c.style.top=(i<4?i*168:3*168+(i-3)*10)+'px';c.style.zIndex=50-i;c.style.transform=i<4?'none':`scale(${1-(i-3)*.03})`;c.style.opacity=i<4?1:Math.max(0,.6-(i-4)*.2)});
+  document.getElementById('done').classList.toggle('show',!live.length);
+  document.getElementById('all').style.opacity=live.length?1:.3;
+}
+function highlight(k){document.querySelectorAll('.pcard').forEach(c=>c.classList.toggle('hl',c.dataset.d===k));
+  const live=[...document.querySelectorAll('.pcard')].filter(c=>!resolved.has(c.dataset.d));const idx=live.findIndex(c=>c.dataset.d===k);
+  if(idx>2){const el=live[idx];el.parentNode.insertBefore(el,live[0]);stackCards()}}
+function approve(k){
+  if(resolved.has(k))return;resolved.add(k);
+  const c=document.querySelector(`.pcard[data-d="${k}"]`);c.classList.add('gone');
+  const open=document.querySelector('.lane.open');const ok=open&&open.dataset.k;
+  lanes();if(ok)document.querySelector(`.lane[data-k="${ok}"]`).classList.add('open');
+  const l=document.querySelector(`.lane[data-k="${k}"] svg`);l.classList.add('seal');
+  stats();setTimeout(stackCards,250);
+  const d=DEPTS.find(x=>x.k===k);toast(`${d.n} sealed · offers queued`);
+}
+document.getElementById('all').onclick=async()=>{for(const p of PROPS){if(!resolved.has(p.d)){approve(p.d);await new Promise(r=>setTimeout(r,320))}}};
+document.getElementById('cmd').onsubmit=e=>{e.preventDefault();const v=document.getElementById('q').value.toLowerCase();document.getElementById('q').value='';
+  if(/saturday|cover|all/.test(v))document.getElementById('all').click();else toast('Draft: the agent would answer here. Try “cover Saturday”.')};
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2200)}
+function fit(){document.getElementById('app').style.setProperty('--s',Math.min(innerWidth/1600,innerHeight/900))}
+addEventListener('resize',fit);fit();
+scaGate('dark',()=>{axis();stats();lanes();cards()});
+</script>
+</body>
+</html>

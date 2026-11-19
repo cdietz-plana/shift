@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shift Coverage · V2 · The Resort</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Caveat:wght@500;700&family=Playfair+Display:wght@600;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="depts.css">
+</head>
+<body>
+<div id="app">
+  <div id="hub">
+    <div class="sky"></div>
+    <div id="world"><svg id="map" viewBox="0 0 1600 900" width="1600" height="900"></svg><div id="pins"></div></div>
+    <div class="hud-top hudEl">
+      <div class="logo"><div class="m"><i>SC</i></div><div><b>Example Resort &amp; Casino</b><small>Shift Coverage · Resort view</small></div></div>
+      <div class="hp"><div class="row"><span>Saturday coverage · <span id="hpo"></span></span><b id="hpv"></b></div><div class="bar"><u id="hpb"></u></div></div>
+      <div class="evpill">⚑ Fight Night <small>Sat Nov 21 · 3 days out</small></div>
+      <div class="user"><div class="av">MR</div><div><b>Maya Rivers</b><small>VP, Resort Operations</small></div></div>
+    </div>
+    <div class="board hudEl"><div class="bh"><h3>Needs you <span id="bcount"></span></h3><p>Proposals, conflicts and approvals from every department</p>
+      <div class="tabs"><button class="on" data-f="all">All</button><button data-f="proposal">Proposals</button><button data-f="conflict">Conflicts</button><button data-f="approval">Approvals</button></div></div>
+      <div class="mlist" id="mlist"></div></div>
+    <div class="npc hudEl"><div class="orb"></div><div class="say" id="say"></div></div>
+    <div class="tip hudEl">Click any building or pin to go inside</div>
+    <div class="hovercard" id="hovercard"></div>
+    <div class="banner" id="banner"><b>SATURDAY SECURED</b><span>Every department covered for fight night</span></div>
+  </div>
+  <div id="dept"></div>
+  <div class="toast" id="toast"></div>
+</div>
+<script src="../gate.js"></script>
+<script src="data.js"></script>
+<script src="hub.js"></script>
+<script src="depts.js"></script>
+<script>scaGate('dark',bootHub)</script>
+</body>
+</html>
