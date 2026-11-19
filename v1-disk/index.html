@@ -221,7 +221,7 @@ function sugg(){const G=document.getElementById('sugg');const f=focus,ks=deptsIn
   G.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>review(b.dataset.k));
   G.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>zoom(ALL[+b.dataset.z]));
 }
-const flowOpts={root:document.getElementById('app'),onEvent:(t,r,d)=>{if(t==='assigned')faceHappy(document.getElementById('face'),2200);if(['status','assigned','close','planDone','response'].includes(t)){draw();side()}},openOne:r=>review(r.dept)};
+const flowOpts={root:document.getElementById('app'),onEvent:(t,r,d)=>{if(t==='assigned')faceHappy(document.getElementById('face'),2200);if(['status','assigned','close','planDone'].includes(t)){draw();side()}},openOne:r=>review(r.dept)};
 function review(k){if(!REQ[k])return;const d=ALL.find(n=>n.dept===k&&n.depth===2);if(d&&!inPath(d,focus))zoom(d);Flow.open(REQ[k],flowOpts)}
 function approve(k){review(k)}
 function stat(){const o=openOf(ROOT);document.getElementById('stat').innerHTML=`Saturday coverage <b>${(100-o*100/ROOT.value*3.4).toFixed(1)}%</b> · <b>${o}</b> open`;const dr=Object.keys(PROPS).filter(k=>REQ[k]&&!doneK(k)&&(!REQ[k].st||REQ[k].st.status==='DRAFT')).length;const A=document.getElementById('all');A.disabled=!dr;A.textContent=dr?(dr===Object.keys(PROPS).length?'Review the plan':`Review the other ${dr}`):'All sent'}

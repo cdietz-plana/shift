@@ -16,6 +16,15 @@ F.state=r=>{if(!r.st)r.st={status:'DRAFT',step:'draft',elig:null,offers:{},assig
 F.open=(req,opts={})=>{R=req;O=opts;planMode=null;histOpen=false;const st=F.state(req);if(!st.hist.length)ev('Draft created by the agent','Coverage agent','From the callout: “'+req.callout+'”');mount(req.c);render()};
 F.close=()=>{if(!W)return;W.classList.remove('on');const w=W;W=null;setTimeout(()=>w.remove(),450);const r=R;R=null;if(O&&O.onEvent)O.onEvent('close',r)};
 function emit(t,d){if(O&&O.onEvent)O.onEvent(t,R,d||{})}
+/* update a live list in place: keeps existing elements, so rows don't replay their entry animation and bars slide instead of restarting */
+function morph(el,html){const t=document.createElement(el.tagName);t.innerHTML=html;sync(el,t)}
+function sync(a,b){const A=[...a.childNodes],B=[...b.childNodes];
+  B.forEach((nb,i)=>{const na=A[i];
+    if(!na){a.appendChild(nb.cloneNode(true));return}
+    if(na.nodeType!==nb.nodeType||na.nodeName!==nb.nodeName){a.replaceChild(nb.cloneNode(true),na);return}
+    if(nb.nodeType===3){if(na.nodeValue!==nb.nodeValue)na.nodeValue=nb.nodeValue;return}
+    if(nb.nodeType===1){[...na.attributes].forEach(x=>{if(!nb.hasAttribute(x.name))na.removeAttribute(x.name)});[...nb.attributes].forEach(x=>{if(na.getAttribute(x.name)!==x.value)na.setAttribute(x.name,x.value)});sync(na,nb)}});
+  for(let i=A.length-1;i>=B.length;i--)A[i].remove()}
 function ev(title,by,sub){F.state(R).hist.unshift({t:now(),title,by:by||'Maya Rivers',sub:sub||''})}
 function face(){return window.agentFace?agentFace():''}
 function mount(c){if(W)W.remove();const root=O.root||document.body;W=document.createElement('div');W.className='fl-wrap';
@@ -100,10 +109,10 @@ async function responses(){const st=R.st;const offs=Object.values(st.offers).fil
   foot(['|',{t:'Waiting for replies…',cls:'pri',dis:true,go:()=>{}}]);
   const pending=Object.values(st.offers).filter(o=>o.s==='sent');if(!pending.length){finishResp();return}
   busy=true;let phoneShown=false;
-  for(const o of pending){await sleep(500);o.s='open';const el=document.getElementById('flRs');if(!el){busy=false;return}el.innerHTML=draw();
+  for(const o of pending){await sleep(500);o.s='open';const el=document.getElementById('flRs');if(!el){busy=false;return}morph(el,draw());
     if(F.workerView&&!phoneShown&&o.c.resp==='accept'&&o.c.n===1){phoneShown=true;await phone(o.c);}else await sleep(450);
     o.s=o.c.resp==='decline'?'decline':'accept';ev(o.s==='accept'?'Offer accepted':'Offer declined',o.c.name,'via secure link');emit('response',{cand:o.c,resp:o.s});
-    const el2=document.getElementById('flRs');if(el2)el2.innerHTML=draw()}
+    const el2=document.getElementById('flRs');if(el2)morph(el2,draw())}
   busy=false;finishResp();
 }
 function finishResp(){const st=R.st;const acc=Object.values(st.offers).filter(o=>o.s==='accept'&&!st.assigned.includes(o.c)&&!st.released.includes(o.c)).map(o=>o.c);const accN=acc.reduce((a,c)=>a+c.n,0);
@@ -206,7 +215,7 @@ async function pResp(){const L=planMode.reqs;const draw=()=>L.map(r=>{const o=Ob
    return `<div class="fl-row" style="flex-wrap:wrap"><span class="av" style="background:${r.c}33;color:${r.c}">${r.need}</span><div class="nm"><b>${r.deptName}</b><small>${a} accepted · ${w} waiting</small></div><span class="fl-tag ${a>r.need?'open':a>=r.need?'ok':w?'sent':'no'}">${a>r.need?'Your call':a>=r.need?'Enough':w?'…':'Short'}</span><div class="fl-prog" style="flex:0 0 100%;--pc:${r.c}"><u style="width:${Math.min(100,a/r.need*100)}%"></u></div></div>`}).join('');
   body('Replies are coming in. Accepting doesn’t assign anyone yet.',`<div class="fl-rows" id="flPr">${draw()}</div>`);foot(['|',{t:'Waiting for replies…',cls:'pri',dis:true,go:()=>{}}]);busy=true;
   const all=[];L.forEach(r=>Object.values(r.st.offers).forEach(o=>all.push([r,o])));all.sort(()=>Math.random()-.5);
-  for(const [r,o] of all){await sleep(110);o.s=o.c.resp==='decline'?'decline':'accept';const pr=R;R=r;ev(o.s==='accept'?'Offer accepted':'Offer declined',o.c.name);emit('response',{cand:o.c,resp:o.s});R=pr;const el=document.getElementById('flPr');if(el)el.innerHTML=draw()}
+  for(const [r,o] of all){await sleep(110);o.s=o.c.resp==='decline'?'decline':'accept';const pr=R;R=r;ev(o.s==='accept'?'Offer accepted':'Offer declined',o.c.name);emit('response',{cand:o.c,resp:o.s});R=pr;const el=document.getElementById('flPr');if(el)morph(el,draw())}
   busy=false;const calls=L.filter(r=>Object.values(r.st.offers).filter(o=>o.s==='accept').reduce((s,o)=>s+o.c.n,0)>r.need).length;
   document.querySelector('#flBody .fl-ag p').innerHTML=`All replies are in. ${calls?`<b>${calls} ${calls>1?'requests have':'request has'} more yeses than spots</b>, so I picked by the house and union rules. You can change those.`:''}`;
   foot(['|',{t:'Review assignments',cls:'pri',go:()=>pGo('assign')}])}
