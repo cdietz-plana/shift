@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shift Coverage · V1 Draft B · Coverage Rings</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#1a1f33}
+body{font-family:Inter,system-ui,sans-serif;color:#e8ecf5}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+#app{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform:translate(-50%,-50%) scale(var(--s,1));background:radial-gradient(ellipse at 35% 50%,#262d48 0%,#1b2036 55%,#141828 100%)}
+.top{position:absolute;left:36px;right:36px;top:22px;height:52px;display:flex;align-items:center;gap:18px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo .m{width:38px;height:38px;border-radius:50%;background:conic-gradient(#f3d77a,#7c5cff,#22d3ee,#f3d77a);display:grid;place-items:center}
+.logo .m i{width:28px;height:28px;border-radius:50%;background:#1b2036;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:800}
+.logo b{font-family:Manrope;font-size:16px}.logo small{display:block;font-size:11.5px;opacity:.55}
+.crumbs{position:absolute;left:749px;top:64px;transform:translateX(-50%);display:flex;align-items:center;border-radius:12px;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.25);overflow:hidden;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08)}
+.crumbs button{font-size:15px;font-weight:700;padding:11px 18px 11px 24px;position:relative;opacity:.75}
+.crumbs button.cur{background:#3b6fd8;opacity:1}
+.crumbs button:not(:last-child)::after{content:'›';position:absolute;right:-4px;opacity:.5}
+.sp{flex:1}
+.event{font-size:12px;font-weight:700;padding:8px 14px;border-radius:999px;background:rgba(255,77,109,.12);border:1px solid rgba(255,77,109,.35);color:#ffb3c1}
+.user{display:flex;align-items:center;gap:10px;font-size:13px}
+.user .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7c5cff,#22d3ee);display:grid;place-items:center;font-weight:800;font-size:12px}
+.user small{display:block;opacity:.55;font-size:11px}
+#disk{position:absolute;left:405px;top:130px;width:760px;height:703px}
+#disk path{cursor:pointer;transition:opacity .2s}
+#disk .lbl{pointer-events:none;font-size:11px;font-weight:700;fill:#fff;paint-order:stroke;stroke:rgba(10,12,30,.55);stroke-width:3px}
+#disk path.dim{opacity:.35}
+.spike{animation:spk 1.4s ease-in-out infinite;cursor:pointer}
+.spike:hover{animation:none;filter:brightness(1.35) drop-shadow(0 0 8px #ff2d55)}
+@keyframes spk{50%{opacity:.55}}
+.hole{cursor:pointer}
+.side{position:absolute;left:36px;top:96px;width:350px;bottom:110px}
+.sugg{position:absolute;right:36px;top:96px;width:360px;bottom:110px;display:flex;flex-direction:column}
+.sugg h3{font-family:Manrope;font-size:15px;font-weight:800}.sugg .sub{font-size:12px;opacity:.6;margin-top:3px}
+.plist{flex:1;overflow-y:auto;margin-top:10px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin}
+.plist .prop{margin-top:0;flex-shrink:0;animation:pin .35s ease both}@keyframes pin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.side h2{font-family:Manrope;font-size:28px;display:flex;justify-content:space-between;align-items:baseline;font-weight:700}
+.side h2 span{font-size:24px}
+.side .sub{font-size:13px;opacity:.6;margin-top:4px}
+.rows{margin-top:16px}
+.row{display:flex;align-items:center;gap:12px;padding:10px 10px;border-radius:10px;font-size:18px;cursor:pointer;transition:background .15s}
+.row:hover,.row.hl{background:rgba(255,255,255,.06)}
+.row i{width:14px;height:14px;border-radius:50%;flex:0 0 12px}
+.row b{flex:1;font-weight:500}
+.row .v{font-family:'JetBrains Mono';font-size:14px;opacity:.7;width:80px;text-align:right}
+.row em{font-style:normal;font-size:13px;font-weight:800;color:#ff8fab;width:44px;text-align:right}
+.row em.ok{color:#5effc8}
+.sep{height:1px;background:rgba(255,255,255,.1);margin:12px 0}
+.prop{margin-top:6px;border-radius:16px;padding:14px 16px;position:relative;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.12)}
+.prop .k{display:flex;align-items:center;gap:10px;font-size:10.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#c4b5fd}
+.prop .fo{position:relative;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#efe9ff,#8b6cff 42%,#3b1d9a 78%)}
+.prop h4{font-family:Manrope;font-size:15px;margin-top:8px;line-height:1.3}
+.prop p{font-size:12.5px;opacity:.65;margin-top:5px;line-height:1.45}
+.btns{display:flex;gap:8px;margin-top:12px}
+.btns button{font-size:12.5px;font-weight:700;padding:8px 13px;border-radius:10px}
+.btns .ok{background:#fff;color:#1b2036}.btns .gh{background:rgba(255,255,255,.08)}
+.bottom{position:absolute;left:36px;right:36px;bottom:26px;height:62px;display:flex;align-items:center;gap:16px}
+.meter{display:flex;align-items:center;gap:14px;flex:1;height:58px;border-radius:999px;padding:0 10px 0 6px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08)}
+.meter .fo{position:relative;flex:0 0 46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#efe9ff,#8b6cff 42%,#3b1d9a 78%);box-shadow:0 0 0 3px #3b6fd8,0 0 18px rgba(124,92,255,.6)}
+.meter input{flex:1;background:none;border:0;outline:0;color:#fff;font-size:14.5px}
+.meter input::placeholder{color:rgba(232,236,245,.45)}
+.meter .stat{font-size:13px;opacity:.8;white-space:nowrap}
+.meter .stat b{font-family:'JetBrains Mono';font-size:15px}
+.allBtn{font-size:13px;font-weight:800;padding:11px 18px;border-radius:999px;background:#e0365c;color:#fff}
+.allBtn:disabled{opacity:.3}
+.toast{position:absolute;left:785px;bottom:104px;transform:translate(-50%,10px);white-space:nowrap;opacity:0;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;transition:all .4s;pointer-events:none;z-index:10;background:rgba(0,0,0,.6)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.draft{position:absolute;left:36px;bottom:6px;font-size:11px;opacity:.35}
+.tip{position:absolute;z-index:30;pointer-events:none;min-width:200px;max-width:300px;padding:11px 14px;border-radius:14px;background:rgba(12,15,32,.94);border:1px solid rgba(255,255,255,.14);box-shadow:0 14px 34px rgba(0,0,0,.45);opacity:0;transition:opacity .12s;backdrop-filter:blur(8px)}
+.tip.show{opacity:1}
+.tip .pth{font-size:11px;opacity:.55;line-height:1.4}
+.tip .nm{display:flex;align-items:center;gap:8px;font-family:Manrope;font-weight:800;font-size:16px;margin-top:3px}
+.tip .nm i{width:11px;height:11px;border-radius:50%;flex:0 0 11px}
+.tip .lv{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;opacity:.5;margin-left:auto}
+.tip .st{display:flex;gap:14px;margin-top:8px;font-size:12.5px}
+.tip .st b{font-family:'JetBrains Mono'}
+.tip .hint{font-size:11px;opacity:.5;margin-top:7px}
+.legend{position:absolute;left:36px;width:350px;bottom:112px;font-size:12.5px;line-height:1.7;z-index:2;padding:14px 16px;border-radius:16px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.07)}
+.legend .rk{display:flex;align-items:center;gap:8px;opacity:.8}.legend .rk b{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.1);font-size:10px}
+.legend i{display:inline-block;width:20px;height:3px;background:#ff3d6e;vertical-align:middle;margin-right:6px;box-shadow:0 0 6px #ff3d6e}
+.prop .pst{margin-left:auto;font-style:normal;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;background:rgba(139,108,255,.2);color:#c4b5fd}
+.prop.done{opacity:.7}.prop.done .pst{background:rgba(52,211,153,.2);color:#6ee7b7}
+.pbar{height:5px;border-radius:3px;background:rgba(255,255,255,.1);margin-top:10px;overflow:hidden}.pbar u{display:block;height:100%;background:linear-gradient(90deg,#34d399,#22d3ee);transition:width .8s}
+.pnum{display:flex;justify-content:space-between;font-size:10.5px;opacity:.6;margin-top:5px}
+.crumbs+.sp+.dmT,.dmT{margin-right:12px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="top"><div class="logo"><div class="m"><i>SC</i></div><div><b>Shift Coverage</b><small>Example Resort &amp; Casino</small></div></div>
+    <div class="crumbs" id="crumbs"></div><div class="sp"></div><span class="event">Sat Nov 21 · Fight Night</span>
+    <div class="user"><div class="av">MR</div><div><b>Maya Rivers</b><small>VP, Resort Operations</small></div></div></div>
+  <div class="legend" id="legend"></div>
+  <svg id="disk" viewBox="0 0 800 740"></svg>
+  <div class="side" id="side"></div>
+  <div class="sugg" id="sugg"></div>
+  <form class="bottom" id="cmd"><div class="meter"><div class="fo faceHost" id="face"></div><input id="q" placeholder="Ask the agent: “cover Saturday”, “show me the hotel”, “who’s near overtime”"><span class="stat" id="stat"></span></div><button type="button" class="allBtn" id="all">Approve all</button></form>
+  <div class="toast" id="toast"></div>
+  <div class="tip" id="tip"></div>
+  <div class="draft">V1 · Draft B · Coverage Rings · concept</div>
+</div>
+<script src="../gate.js"></script>
+<script src="../face.js"></script>
+<script src="../datamode.js"></script>
+<link rel="stylesheet" href="../flow/flow.css">
+<script src="../flow/requests.js"></script>
+<script src="../flow/flow.js"></script>
+<script>
+/* hierarchy: resort > division > department > role > shift block */
+const RAW=[
+ ['Gaming',45,[['casino','Casino Floor',[['Dealers',96,2],['Floor supervisors',22],['Pit managers',8],['Cage',16]]],['slots','Slot Operations',[['Slot techs',14],['Attendants',24]]]]],
+ ['Hotel',265,[['front','Front Desk',[['Desk agents',28,3],['Concierge',10],['PBX',8]]],['hk','Housekeeping',[['Room attendants',168],['Inspectors',22],['House porters',20]]],['valet','Bell & Valet',[['Valet attendants',32,6],['Bell staff',18],['Dispatch',4]]]]],
+ ['Food & Beverage',22,[['steak','Ember & Oak',[['Servers',14,2],['Bartenders',6],['Hosts',4],['Kitchen',10]]],['market','The Market',[['Attendants',38],['Cooks',22]]]]],
+ ['Retail',330,[['shop','Resort Shop',[['Associates',14,1],['Leads',4]]]]],
+ ['Operations',190,[['sec','Security',[['Officers',96,8],['Supervisors',16],['Dispatch',8]]],['it','IT',[['On-call',6],['Help desk',16]]],['evs','Facilities & EVS',[['EVS crew',60,4],['Engineers',25]]],['grounds','Grounds & Pool',[['Groundskeepers',18],['Pool attendants',12]]]]],
+ ['Marketing',295,[['mkt','Marketing & Events',[['VIP hosts',10,2],['Promotions',6]]]]]];
+const PROPS={sec:['Cover arena entry with 5 internal officers and 3 contract officers','Internal officers stay under 12 hrs with 10 hrs rest. Contract officers come from the approved vendor with valid guard cards.'],
+ valet:['Move 4 cross-trained bell staff to valet, offer 2 on-call shifts','Bell desk stays at minimum. All 4 hold valet driving clearance.'],
+ casino:['Riley Chen and Morgan Reyes to High Limit Baccarat','Both certified, free tonight, no overtime. Gaming licenses current.'],
+ steak:['Offer Sections 5 and 6 to cross-trained servers','Front Desk and The Market have qualified people. If more say yes than needed, union seniority decides.'],
+ front:['Shift 2 concierge agents to the desk from 2 to 6 PM','Covers the arrival wave. Concierge keeps one agent on the floor.'],
+ evs:['Offer arena teardown to 4 overnight EVS crew','Starts at midnight. Overnight crew is under weekly hours.'],
+ mkt:['2 Players Club reps to VIP check-in','Same CRM access. Back on Players Club by 7 PM.'],
+ shop:['Extend one shop associate by 2 hours','Stays within 10 hrs for the day.']};
+const filledK=k=>REQ[k]&&REQ[k].st?REQ[k].st.assigned.reduce((a,c)=>a+c.n,0):0;
+const doneK=k=>REQ[k]&&REQ[k].st&&['FILLED','UNABLE_TO_FILL'].includes(REQ[k].st.status);
+const resolved={has:k=>doneK(k)};
+const SL={DRAFT:'Draft',PENDING_APPROVAL:'Pending approval',READY_FOR_OUTREACH:'Ready',OUTREACH_IN_PROGRESS:'Offers out',PARTIALLY_FILLED:'Partially filled',FILLED:'Filled',UNABLE_TO_FILL:'Unable to fill'};
+let uid=0;
+function node(name,parent,extra={}){return {id:uid++,name,parent,children:[],...extra}}
+const ROOT=node('Resort',null,{depth:0,hue:220});
+RAW.forEach(([dv,hue,depts])=>{const D=node(dv,ROOT,{depth:1,hue,idx:0});ROOT.children.push(D);
+  depts.forEach(([k,n,roles],di)=>{const P=node(n,D,{depth:2,hue:hue,idx:di,dept:k});D.children.push(P);
+    roles.forEach(([rn,c,open=0],ri)=>{const R=node(rn,P,{depth:3,hue:hue,idx:ri,dept:k});P.children.push(R);
+      const blocks=[['Day',.34],['Swing',.36],['Night',.30]];blocks.forEach(([bn,f],bi)=>{const cnt=Math.max(1,Math.round(c*f));R.children.push(node(bn+' shift',R,{depth:4,hue:hue,idx:bi,dept:k,count:cnt,open:bi===1?open:0}))})})})});
+function sum(n){if(!n.children.length)return n.value=n.count;return n.value=n.children.reduce((a,c)=>a+sum(c),0)}sum(ROOT);
+function openOf(n){if(!n.children.length)return n.open?Math.max(0,n.open-filledK(n.dept)):0;return n.children.reduce((a,c)=>a+openOf(c),0)}
+function layout(n,x0){n.x0=x0;n.x1=x0+n.value/ROOT.value;let x=x0;n.children.forEach(c=>{layout(c,x);x=c.x1})}layout(ROOT,0);
+const ALL=[];(function walk(n){ALL.push(n);n.children.forEach(walk)})(ROOT);
+/* view */
+const CX=400,CY=372,HOLE=78,RW=62,GAP=3,MAXR=4;
+let view={x0:0,x1:1,d:0},focus=ROOT,hover=null,anim=null;
+const ang=(x,v)=>Math.max(0,Math.min(1,(x-v.x0)/(v.x1-v.x0)))*Math.PI*2;
+function arc(a0,a1,r0,r1){if(a1-a0<.0005)return '';const p=(r,a)=>[CX+r*Math.sin(a),CY-r*Math.cos(a)];a1=Math.min(a1,a0+Math.PI*2-.0001);
+  const [x1,y1]=p(r1,a0),[x2,y2]=p(r1,a1),[x3,y3]=p(r0,a1),[x4,y4]=p(r0,a0),lg=a1-a0>Math.PI?1:0;
+  return `M${x1.toFixed(2)},${y1.toFixed(2)}A${r1},${r1} 0 ${lg} 1 ${x2.toFixed(2)},${y2.toFixed(2)}L${x3.toFixed(2)},${y3.toFixed(2)}A${r0},${r0} 0 ${lg} 0 ${x4.toFixed(2)},${y4.toFixed(2)}Z`}
+const ringR=ring=>{const r0=HOLE+GAP+(ring-1)*(RW+GAP)-(ring>1?(ring-1)*10:0),w=RW-(ring-1)*10;return [r0,r0+w]};
+function color(n,ring){const l=44+ring*8+(n.idx%2?5:0),sa=72-ring*6;return `hsl(${n.hue+((n.idx||0)%3-1)*11},${sa}%,${Math.min(80,l)}%)`}
+function inPath(n,t){while(t){if(t===n)return true;t=t.parent}return false}
+const LEVEL=['Resort','Division','Department','Role','Shift'];
+function center(f){const fo=openOf(f);const g=document.getElementById('ctr');if(!g)return;
+  g.innerHTML=`<text x="${CX}" y="${CY-16}" text-anchor="middle" font-size="11" font-weight="700" fill="rgba(255,255,255,.55)" letter-spacing="1">${LEVEL[f.depth].toUpperCase()}</text>
+   <text x="${CX}" y="${CY+8}" text-anchor="middle" font-family="Manrope" font-weight="800" font-size="25" fill="#fff">${f.value}</text>
+   <text x="${CX}" y="${CY+25}" text-anchor="middle" font-size="11.5" fill="rgba(255,255,255,.7)">${f===ROOT?'people':f.name.length>14?f.name.slice(0,13)+'…':f.name}</text>
+   <text x="${CX}" y="${CY+42}" text-anchor="middle" font-size="11.5" font-weight="800" fill="${fo?'#ff8fab':'#5effc8'}">${fo?fo+' open':'covered'}</text>`}
+function tipShow(n,e,spike){const T=document.getElementById('tip');if(!n){T.classList.remove('show');return}
+  const chain=[];let p=n.parent;while(p&&p!==ROOT){chain.unshift(p.name);p=p.parent}const o=openOf(n);const cov=Math.round((1-o/n.value)*1000)/10;
+  const ring=Math.max(1,Math.min(MAXR,n.depth-view.d));
+  T.innerHTML=`${chain.length?`<div class="pth">${chain.join(' › ')}</div>`:''}<div class="nm"><i style="background:${color(n,ring)}"></i>${n.name}<span class="lv">${LEVEL[n.depth]}</span></div>
+   <div class="st"><span><b>${n.value}</b> people</span>${o?`<span style="color:#ff8fab"><b>${o}</b> open</span><span><b>${cov}%</b> covered</span>`:'<span style="color:#5effc8">Fully covered</span>'}</div>
+   <div class="hint">${spike?'Click to jump to this gap':n.children.length?'Click to zoom in':'Shift block · click to see its role'}</div>`;
+  tipMove(e);T.classList.add('show')}
+function tipMove(e){if(!e)return;const T=document.getElementById('tip'),A=document.getElementById('app').getBoundingClientRect(),k=A.width/1600;
+  let x=(e.clientX-A.left)/k+18,y=(e.clientY-A.top)/k+18;if(x+T.offsetWidth>1580)x-=T.offsetWidth+36;if(y+T.offsetHeight>880)y-=T.offsetHeight+36;T.style.left=x+'px';T.style.top=y+'px'}
+function setHover(n){hover=n;document.querySelectorAll('#disk path[data-id]').forEach(p=>{const m=ALL[+p.dataset.id];p.classList.toggle('dim',!!(n&&!inPath(n,m)&&!inPath(m,n)))});
+  center(focus);document.querySelectorAll('.row').forEach(r=>r.classList.toggle('hl',!!(n&&(+r.dataset.id===n.id||inPath(ALL[+r.dataset.id],n)))))}
+function draw(){
+  const v=view;let s='',lb='';
+  ALL.forEach(n=>{const ring=n.depth-v.d;if(ring<1||ring>MAXR)return;const a0=ang(n.x0,v),a1=ang(n.x1,v);if(a1-a0<.002)return;const [r0,r1]=ringR(ring);
+    s+=`<path d="${arc(a0+.004,a1-.004,r0,r1)}" fill="${color(n,ring)}" data-id="${n.id}"/>`;
+    const rm=(r0+r1)/2,am=(a0+a1)/2,txt=n.depth===4?n.name.split(' ')[0]:n.name;
+    if((a1-a0)*rm>txt.length*6.6+14&&r1-r0>=26&&Number.isInteger(v.d))lb+=`<text class="lbl" x="${(CX+rm*Math.sin(am)).toFixed(1)}" y="${(CY-rm*Math.cos(am)+4).toFixed(1)}" text-anchor="middle">${txt}</text>`;});
+  ALL.forEach(n=>{if(n.children.length||!openOf(n))return;const nOpen=openOf(n);const ring=Math.min(n.depth-v.d,MAXR);if(ring<1)return;
+    if(n.x1<=v.x0+1e-9||n.x0>=v.x1-1e-9)return;const a1=ang(n.x1,v),a0=ang(n.x0,v);
+    const share=nOpen/n.count*(a1-a0);const mid=a1-share/2;const w=Math.max(.035,share);const [,r1]=ringR(Math.min(n.depth-v.d,MAXR));const len=Math.min(70,22+nOpen*7);const w2=Math.min(w,.5),[sx,sy]=[CX+(r1+len+16)*Math.sin(mid),CY-(r1+len+16)*Math.cos(mid)];
+    s+=`<path class="spike" data-sp="${n.id}" d="${arc(mid-w2/2,mid+w2/2,r1+3,r1+3+len)}" fill="url(#spk)"></path>`+(v.x1-v.x0<.35?`<text x="${sx}" y="${sy+4}" text-anchor="middle" font-size="13" font-weight="800" fill="#ff8fab">−${nOpen}</text>`:'')});
+  s+=`<defs><radialGradient id="spk" cx="${CX}" cy="${CY}" r="420" gradientUnits="userSpaceOnUse"><stop offset=".3" stop-color="#ff7a95"/><stop offset="1" stop-color="#ff2d55"/></radialGradient></defs>
+   ${lb}<circle class="hole" cx="${CX}" cy="${CY}" r="${HOLE-4}" fill="#1b2036" stroke="rgba(255,255,255,.1)"/><g id="ctr" style="pointer-events:none"></g>`;
+  const S=document.getElementById('disk');S.innerHTML=s;center(hover||focus);
+  S.querySelectorAll('path[data-id]').forEach(p=>{const n=ALL[+p.dataset.id];p.onclick=e=>{e.stopPropagation();zoom(n.children.length?n:n.parent)};p.onmouseenter=e=>{setHover(n);tipShow(n,e)};p.onmousemove=tipMove;p.onmouseleave=()=>{setHover(null);tipShow(null)}});
+  S.querySelectorAll('.spike').forEach(p=>{const n=ALL[+p.dataset.sp];p.onclick=e=>{e.stopPropagation();tipShow(null);spikeZoom(n)};p.onmouseenter=e=>{setHover(n.parent);tipShow(n,e,true)};p.onmousemove=tipMove;p.onmouseleave=()=>{setHover(null);tipShow(null)}});
+  S.querySelector('.hole').onclick=()=>{if(focus.parent)zoom(focus.parent)};
+  if(hover)setHover(hover);
+}
+function spikeZoom(n){/* resort or division -> department; department -> role; role -> stay */
+  const dept=n.parent.parent,role=n.parent;const t=focus.depth<2?dept:focus.depth<3?role:null;
+  if(t){zoom(t);toast(`${openOf(n)} open · ${role.name}, ${n.name.toLowerCase()}`)}else{toast(`${openOf(n)} open on the ${n.name.toLowerCase()}`);review(n.dept)}}
+function legend(){const L=document.getElementById('legend');const names={1:'Divisions',2:'Departments',3:'Roles',4:'Shifts · day, swing, night'};
+  const rows=[];for(let d=focus.depth+1;d<=4&&rows.length<MAXR;d++)rows.push(`<div class="rk"><b>${rows.length+1}</b>${names[d]}</div>`);
+  L.innerHTML=`<div style="font-weight:800;opacity:.9;margin-bottom:4px">Rings, inside out</div>${rows.join('')}<div class="rk" style="margin-top:6px"><span style="display:inline-block;width:18px;height:4px;background:#ff2d55;box-shadow:0 0 6px #ff2d55"></span>Open shifts</div><div style="opacity:.55;margin-top:6px">Slice size = people on shift Saturday.<br>${DM.roster?'Spikes = gaps against your staffing template.<br>':''}Click a slice to zoom in, the center to go back.</div>${DM.roster?'<div style="margin-top:8px;font-size:11.5px;line-height:1.45;opacity:.85"><span class="dmBadge">Roster only</span> The rings are built from the schedule, so they look the same. Gaps come from the template, not demand.</div>':''}`}
+function zoom(n){if(!n||n===focus)return;tipShow(null);focus=n;hover=null;const from={...view},to={x0:n.x0,x1:n.x1,d:n.depth};const t0=performance.now(),D=750;
+  cancelAnimationFrame(anim);const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+  const step=t=>{const k=ease(Math.min(1,(t-t0)/D));view={x0:from.x0+(to.x0-from.x0)*k,x1:from.x1+(to.x1-from.x1)*k,d:from.d+(to.d-from.d)*k};
+    view.d=k<1?Math.round(view.d*100)/100:to.d;draw();if(k<1)anim=requestAnimationFrame(step);else{view=to;draw()}};
+  /* depth snaps so rings slide: use integer depth at end, fractional while moving */
+  anim=requestAnimationFrame(step);crumbs();side();legend();faceTalk(document.getElementById('face'),700)}
+function crumbs(){const c=[];let n=focus;while(n){c.unshift(n);n=n.parent}
+  document.getElementById('crumbs').innerHTML=c.map((n,i)=>`<button class="${i===c.length-1?'cur':''}" data-id="${n.id}">${n===ROOT?'Example Resort':n.name}</button>`).join('');
+  document.querySelectorAll('#crumbs button').forEach(b=>b.onclick=()=>zoom(ALL[+b.dataset.id]))}
+function deptsIn(n){const s=new Set();(function w(x){if(x.dept)s.add(x.dept);x.children.forEach(w)})(n);return [...s]}
+function side(){const S=document.getElementById('side');const f=focus,fo=openOf(f);
+  S.innerHTML=`<h2>${f===ROOT?'Example Resort':f.name}</h2><div class="sub">${f.value} people · ${f===ROOT?'Saturday, fight night':'Saturday · '+(Math.round((1-fo/f.value)*1000)/10)+'% covered'}</div>
+   <div style="font-size:11px;font-weight:800;letter-spacing:1px;opacity:.5;margin-top:18px;text-transform:uppercase">${f.children.length?{0:'Divisions',1:'Departments',2:'Roles',3:'Shifts'}[f.depth]:''}</div>
+   <div class="rows">${f.children.map(c=>{const o=openOf(c);return `<div class="row" data-id="${c.id}"><i style="background:${color(c,1)}"></i><b>${c.name}</b><span class="v">${c.value}</span><em class="${o?'':'ok'}">${o?'−'+o:'✓'}</em></div>`}).join('')}</div>`;
+  S.querySelectorAll('.row').forEach(r=>{const n=ALL[+r.dataset.id];r.onclick=()=>{if(n.children.length)zoom(n)};r.onmouseenter=()=>setHover(n);r.onmouseleave=()=>setHover(null)});
+  sugg();stat();
+}
+function sugg(){const G=document.getElementById('sugg');const f=focus,ks=deptsIn(f).filter(k=>PROPS[k]&&REQ[k]);const live=ks.filter(k=>!doneK(k));
+  const nm=f===ROOT?'the whole resort':f.name;
+  const order=ks.sort((a,b)=>doneK(a)-doneK(b));
+  G.innerHTML=`<h3>Agent requests</h3><div class="sub">${live.length?`${live.length} for ${nm}. I drafted each one. Nothing goes out until you review it.`:`Nothing open in ${nm}.`}</div>
+   <div class="plist">${order.length?order.map(k=>{const d=ALL.find(n=>n.dept===k&&n.depth===2);const r=REQ[k],st=r.st,fl=filledK(k),dn=doneK(k);
+     return `<div class="prop ${dn?'done':''}"><div class="k"><span class="fo faceHost ${dn?'happy':''}">${agentFace()}</span><span style="color:${color(d,1)}">${d.name}</span><em class="pst">${SL[st?st.status:'DRAFT']}</em></div><h4>${dn?(st.status==='FILLED'?`${r.role} · covered`:`${r.role} · ${fl} of ${r.need}`):PROPS[k][0]}</h4><p>${dn?st.assigned.map(c=>c.name).join(', '):PROPS[k][1]}</p>
+       <div class="pbar"><u style="width:${fl/r.need*100}%"></u></div><div class="pnum"><span>${fl} of ${r.need} filled</span><span>${r.when}</span></div>
+       <div class="btns">${dn?'':`<button class="ok" data-k="${k}">${st&&st.status!=='DRAFT'?'Continue':'Review'}</button>`}<button class="gh" data-z="${d.id}">Show on rings</button></div></div>`}).join('')
+    :`<div class="prop"><div class="k"><span class="fo faceHost happy">${agentFace()}</span>Coverage agent</div><h4>All covered</h4><p>Every shift in ${nm} is covered for Saturday.</p></div>`}</div>`;
+  G.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>review(b.dataset.k));
+  G.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>zoom(ALL[+b.dataset.z]));
+}
+const flowOpts={root:document.getElementById('app'),onEvent:(t,r,d)=>{if(t==='assigned')faceHappy(document.getElementById('face'),2200);if(['status','assigned','close','planDone','response'].includes(t)){draw();side()}},openOne:r=>review(r.dept)};
+function review(k){if(!REQ[k])return;const d=ALL.find(n=>n.dept===k&&n.depth===2);if(d&&!inPath(d,focus))zoom(d);Flow.open(REQ[k],flowOpts)}
+function approve(k){review(k)}
+function stat(){const o=openOf(ROOT);document.getElementById('stat').innerHTML=`Saturday coverage <b>${(100-o*100/ROOT.value*3.4).toFixed(1)}%</b> · <b>${o}</b> open`;const dr=Object.keys(PROPS).filter(k=>REQ[k]&&!doneK(k)&&(!REQ[k].st||REQ[k].st.status==='DRAFT')).length;const A=document.getElementById('all');A.disabled=!dr;A.textContent=dr?(dr===Object.keys(PROPS).length?'Review the plan':`Review the other ${dr}`):'All sent'}
+document.getElementById('all').onclick=()=>{const l=Object.keys(PROPS).filter(k=>REQ[k]&&!doneK(k)&&(!REQ[k].st||REQ[k].st.status==='DRAFT')).map(k=>REQ[k]);if(l.length)Flow.openPlan(l,flowOpts)};
+document.getElementById('cmd').onsubmit=e=>{e.preventDefault();const v=document.getElementById('q').value.toLowerCase();document.getElementById('q').value='';
+  const n=ALL.find(n=>n.depth<=2&&n!==ROOT&&v.includes(n.name.toLowerCase().split(' ')[0].replace('&','')));if(n){zoom(n);return}
+  if(/cover|saturday|all/.test(v)){document.getElementById('all').click();return}toast('Draft: try “cover Saturday” or a department name')};
+function toast(t){faceTalk(document.getElementById('face'),1100);const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2200)}
+function fit(){document.getElementById('app').style.setProperty('--s',Math.min(innerWidth/1600,innerHeight/900))}
+addEventListener('resize',fit);fit();
+DM.mount(document.querySelector('.event'),{before:true});DM.on(()=>{legend();toast(DM.roster?'Roster only: the rings already use only the schedule':'Ops data on')});
+scaGate('dark',()=>{document.getElementById('face').innerHTML=agentFace();draw();crumbs();side();legend()});
+</script>
+<script>(function(){var l=document.querySelector('.logo');if(l){l.style.cursor='pointer';l.title='All prototypes';l.onclick=function(){location.href='../index.html'}}})()</script>
+</body>
+</html>

@@ -469,10 +469,19 @@ body.healthcare #gate form{background:#fff;border:1px solid #dbe4ed;color:#0f223
 body.healthcare #gate input{background:#f3f6f9;border:1px solid #e1e8ef;color:#0f2233}
 body.healthcare #gate button{background:linear-gradient(135deg,#0ea5a4,#2563eb);color:#fff}
 body.healthcare #gate .gm{background:linear-gradient(135deg,#0ea5a4,#2563eb);color:#fff}
+.chist{position:absolute;left:24px;bottom:24px;width:360px;max-height:520px;overflow:auto;z-index:400;border-radius:18px;padding:16px 18px;background:rgba(14,16,28,.96);color:#eef0ff;border:1px solid rgba(255,255,255,.12);box-shadow:0 30px 60px rgba(0,0,0,.5);font-family:Inter,sans-serif}
+.chist .hh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.chist .hh button{color:inherit;opacity:.7}
+.chist .he{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px}.chist .he i{width:8px;height:8px;border-radius:50%;background:#8b6cff;margin-top:5px;flex:0 0 8px}
+.chist .he small{display:block;font-size:11px;opacity:.6;margin-top:2px}
+.histBtn{position:absolute;left:24px;bottom:24px;z-index:390;font-size:12px;font-weight:800;padding:9px 14px;border-radius:12px;background:rgba(14,16,28,.85);color:#eef0ff;border:1px solid rgba(255,255,255,.15)}
 </style>
+<link rel="stylesheet" href="../flow/flow.css">
 </head>
 <body class="casino">
 <div id="app"></div>
+<script src="../datamode.js"></script>
+<script src="../flow/requests.js"></script>
+<script src="../flow/flow.js"></script>
 <script>
 /* =========================================================
    ICONS
@@ -565,7 +574,7 @@ T.healthcare.units=[
    ========================================================= */
 const S={theme:'casino',view:0,day:TODAY,filled:false,selTable:'BAC-2',selUnit:'ICU 4 West',filter:'All',flip:{},req:null,flowBusy:false,opts:{}};
 function cfg(){return T[S.theme]}
-function resetReq(){S.req={status:'NONE',eligible:[],offers:{},assigned:[]};S.filled=false;S.opts={};cfg().toggles.forEach(t=>S.opts[t.k]=t.on)}
+function resetReq(){S.req={status:'NONE',eligible:[],offers:{},assigned:[]};S.hist=[];S.phoneShown=false;S.filled=false;S.opts={};cfg().toggles.forEach(t=>S.opts[t.k]=t.on)}
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const ini=n=>n.split(' ').map(x=>x[0]).join('').slice(0,2);
@@ -577,9 +586,10 @@ function laneData(day){
   return c.lanes.map(L=>{
     const req=[],sch=[];
     for(let h=0;h<24;h++){
-      let r=L.flat?L.max:Math.max(1,Math.round(L.max*c.curve[h]*c.dayF[day]));
-      if(S.theme==='healthcare'&&!L.flat) r=Math.max(2,Math.round(L.max*c.curve[h]*c.dayF[day]));
-      if(L.k==='Emergency'&&S.theme==='healthcare') r=Math.round(6+3*Math.sin((h-8)/24*Math.PI*2)*0.9+ (h>=10&&h<=22?1:0));
+      const cv=(window.DM&&DM.roster)?(hh=>{const b0=hh<8?0:hh<16?8:16;let t=0;for(let i=b0;i<b0+8;i++)t+=c.curve[i];return t/8})(h):c.curve[h];
+      let r=L.flat?L.max:Math.max(1,Math.round(L.max*cv*c.dayF[day]));
+      if(S.theme==='healthcare'&&!L.flat) r=Math.max(2,Math.round(L.max*cv*c.dayF[day]));
+      if(L.k==='Emergency'&&S.theme==='healthcare'&&!(window.DM&&DM.roster)) r=Math.round(6+3*Math.sin((h-8)/24*Math.PI*2)*0.9+ (h>=10&&h<=22?1:0));
       let s=r;
       c.gaps.forEach(g=>{if(g.day===day&&g.lane===L.k&&g.hrs.includes(h)&&!(g.main&&S.filled)) s=r-g.short});
       req.push(r);sch.push(Math.max(0,s));
@@ -603,7 +613,7 @@ function mount(){
   <div class="topbar">
     <div class="brand"><div class="mark">${S.theme==='casino'?'<i>SC</i>':I.plus}</div><div><b>${c.product}</b><small>${c.sub}</small></div></div>
     <div class="spacer"></div>
-    <button class="ghostBtn" id="resetBtn">Reset demo</button>
+    <button class="ghostBtn" id="histBtn2" onclick="showHist()">History</button><button class="ghostBtn" id="resetBtn">Reset demo</button>
     <div class="themeSwitch"><div class="knob"></div><button data-t="casino">Casino</button><button data-t="healthcare">Healthcare</button></div>
     <div class="who"><div class="av">${c.mgr.i}</div><div><b>${c.mgr.n}</b><small>${c.mgr.r}</small></div></div>
   </div>
@@ -623,6 +633,7 @@ function mount(){
   $$('[data-v]').forEach(b=>b.onclick=()=>go(+b.dataset.v));
   $$('.themeSwitch button').forEach(b=>b.onclick=()=>switchTheme(b.dataset.t));
   $('#resetBtn').onclick=()=>{resetReq();renderAll();layout(true);toast('Demo reset')};
+  {const br=$('.brand');if(br&&!(typeof EMBED!=='undefined'&&EMBED)){br.style.cursor='pointer';br.title='All prototypes';br.onclick=()=>location.href='../index.html'}}
   renderAll();layout(true);
   if(typeof EMBED!=='undefined'&&EMBED){const ts=$('.themeSwitch');if(ts)ts.style.display='none';const bb=document.createElement('button');bb.className='ghostBtn';bb.textContent='\u2190 Back to resort';bb.onclick=()=>{try{parent.postMessage({type:'sca-back'},'*')}catch(e){}};$('.topbar').insertBefore(bb,$('.topbar .spacer'));$('.brand small').textContent='Casino Floor · Table Games';}
   requestAnimationFrame(()=>{const k=$('.themeSwitch .knob'),b=$(`.themeSwitch button[data-t="${S.theme}"]`);k.style.left=b.offsetLeft+'px';k.style.width=b.offsetWidth+'px';$$('.themeSwitch button').forEach(x=>x.classList.toggle('on',x===b))});
@@ -723,10 +734,10 @@ const STEPS_BASE=['Draft','Confirm','Outreach','Responses','Filled'];
 function steps(){return S.opts.inc?['Draft','Confirm','Approve','Outreach','Responses','Filled']:STEPS_BASE}
 function stepIdx(){
   const s=S.req.status,st=steps();
-  const map={NONE:-1,DRAFT:0,PENDING_APPROVAL:st.indexOf('Approve'),READY_FOR_OUTREACH:st.indexOf('Outreach')-0.5,OUTREACH_IN_PROGRESS:st.indexOf('Outreach'),RESPONSES:st.indexOf('Responses'),FILLED:st.length};
+  const map={NONE:-1,DRAFT:0,PENDING_APPROVAL:st.indexOf('Approve'),READY_FOR_OUTREACH:st.indexOf('Outreach')-0.5,OUTREACH_IN_PROGRESS:st.indexOf('Outreach'),RESPONSES:st.indexOf('Responses'),PARTIALLY_FILLED:st.length-1,FILLED:st.length};
   return map[s];
 }
-const STATUS_LBL={NONE:'No open requirement',DRAFT:'Draft',PENDING_APPROVAL:'Pending approval',READY_FOR_OUTREACH:'Ready for outreach',OUTREACH_IN_PROGRESS:'Outreach in progress',RESPONSES:'Responses in',FILLED:'Filled'};
+const STATUS_LBL={NONE:'No open requirement',DRAFT:'Draft',PENDING_APPROVAL:'Pending approval',READY_FOR_OUTREACH:'Ready for outreach',OUTREACH_IN_PROGRESS:'Outreach in progress',RESPONSES:'Responses in',PARTIALLY_FILLED:'Partially filled',FILLED:'Filled'};
 function renderRail(){
   const r=$('#rail');if(!r)return;const c=cfg(),g=c.gap,si=stepIdx(),st=steps();
   const assigned=S.req.assigned;
@@ -755,7 +766,7 @@ function railGlance(){
 
 /* ---- the agent flow (mirrors repo states) ---- */
 async function startFlow(){
-  if(S.flowBusy)return;
+  if(S.flowBusy)return;if(!S.hist||!S.hist.length){S.hist=[];hist('Draft created by the agent','Coverage agent','From the gap on '+cfg().gap.loc)}
   if(S.req.status==='FILLED'){aiSay(`That one’s already filled. Hit <b>Reset demo</b> to run it again.`);return}
   S.flowBusy=true;const c=cfg(),g=c.gap;
   S.req.status='DRAFT';renderRail();
@@ -778,7 +789,7 @@ async function confirmStep(){
     m.querySelector('.offer').classList.remove('sending');m.querySelector('.offer').innerHTML=`<span class="nm">Approved by ${c.peer.split(',')[0]}<div class="sub">${c.gap.incentive}</div></span><span class="pill green">Approved</span>`;
     await sleep(500);
   }
-  S.req.status='READY_FOR_OUTREACH';renderRail();
+  S.req.status='READY_FOR_OUTREACH';renderRail();hist(S.opts.inc?'Approved by peer':'Request confirmed',S.opts.inc?c.peer.split(',')[0]:undefined);
   const pool=c.roster;
   const isElig=r=>r.tag==='base'||(r.tag==='ot'&&S.opts.ot)||(r.tag==='cross'&&S.opts.cross);
   const m=await aiSay(`Checking ${pool.length} ${S.theme==='casino'?'dealers':'nurses'} against certification, availability, rest rules and hours…<div class="elig">${pool.map(r=>`<div class="ecard" data-id="${r.id}"><div class="front"></div><div class="back ${isElig(r)?'':'no'}"><span class="tick ${isElig(r)?'y':'n'}">${isElig(r)?'✓':'✕'}</span><div class="nm">${r.n}</div><div class="rs">${isElig(r)?r.ok:(r.no||'Needs overtime or cross-training')}</div></div></div>`).join('')}</div>`,{wait:600});
@@ -792,7 +803,7 @@ async function confirmStep(){
   $('#outBtn').onclick=async e=>{if(S.flowBusy)return;S.flowBusy=true;e.target.disabled=true;e.target.style.opacity=.5;await outreachStep()};
 }
 async function outreachStep(){
-  const c=cfg();S.req.status='OUTREACH_IN_PROGRESS';renderRail();
+  const c=cfg();S.req.status='OUTREACH_IN_PROGRESS';renderRail();hist('Offers sent',undefined,S.req.eligible.length+' people · email and text');
   const el=S.req.eligible.map(id=>c.roster.find(r=>r.id===id));
   const m=await aiSay(`Offers are out. Responses come back through each person’s secure link.<div class="offers">${el.map(r=>`<div class="offer sending" data-id="${r.id}"><span class="nm">${r.n}<div class="sub">${r.role} · fit ${r.fit}</div></span><span class="pill dim">Sent</span></div>`).join('')}</div>`,{wait:500});
   const order=[...el].sort((a,b)=>({accept:0,decline:1,pending:2}[a.resp]-({accept:0,decline:1,pending:2}[b.resp])));
@@ -802,6 +813,8 @@ async function outreachStep(){
     row.classList.remove('sending');S.req.offers[r.id]=r.resp;
     row.querySelector('.pill').className='pill '+(r.resp==='accept'?'green':'red');row.querySelector('.pill').textContent=r.resp==='accept'?'Accepted':'Declined';
     if(S.theme==='casino'&&r.resp==='accept')miniChip(row);
+    hist(r.resp==='accept'?'Offer accepted':'Offer declined',r.n,'via secure link');
+    if(r.resp==='accept'&&!S.phoneShown&&window.Flow&&S.workerView!==false){S.phoneShown=true;await Flow.phoneDemo({role:c.gap.role,loc:c.gap.loc,when:c.gap.win.replace('Tonight · ','Tonight ')},{name:r.n},$('#app'),'right:auto;left:640px')}
   }
   S.req.status='RESPONSES';renderRail();
   const acc=el.filter(r=>S.req.offers[r.id]==='accept').sort((a,b)=>b.fit-a.fit);
@@ -820,7 +833,7 @@ async function outreachStep(){
 function miniChip(row){const ch=document.createElement('div');ch.className='chip';ch.style.cssText='--c:#c62f3a;width:22px;height:22px;position:absolute;right:100px;top:8px;animation:chipDrop .5s cubic-bezier(.3,1.5,.5,1) both';row.style.position='relative';row.appendChild(ch)}
 async function fillStep(){
   const c=cfg();
-  S.req.status=S.req.assigned.length>=c.gap.need?'FILLED':'RESPONSES';
+  S.req.status=S.req.assigned.length>=c.gap.need?'FILLED':'PARTIALLY_FILLED';S.req.assigned.forEach(id=>hist('Worker assigned',undefined,nameOf(id)));hist(S.req.status==='FILLED'?'Request filled':'Partially filled');
   if(S.req.status==='FILLED'){S.filled=true;try{if(EMBED)parent.postMessage({type:'sca-filled'},'*')}catch(e){}}
   renderRail();refreshData();celebrate();
   await sleep(900);
@@ -828,9 +841,14 @@ async function fillStep(){
   await aiSay(S.req.status==='FILLED'
     ?`${S.theme==='casino'?'Tables are dealt.':'Covered.'} <b>${S.req.assigned.map(nameOf).join('</b> and <b>')}</b> are on ${c.gap.loc} tonight. I let the others know the shift is filled${pend.length?` and closed ${nameOf(pend[0])}’s pending offer`:''}. Coverage today is now <b>${dayPct(TODAY)}%</b>.
       <div class="actRow"><button class="actBtn primary" onclick="go(1)">See it on ${S.theme==='casino'?'the floor':'the unit'}</button><button class="actBtn" onclick="go(2)">Open ${c.views[2].l}</button></div>`
-    :`Assigned ${S.req.assigned.map(nameOf).join(', ')}. One position is still open, so offers stay live.`);
+    :`<b>Partially filled.</b> ${S.req.assigned.map(nameOf).join(', ')} ${S.req.assigned.length>1?'are':'is'} assigned, and ${c.gap.need-S.req.assigned.length} position${c.gap.need-S.req.assigned.length>1?'s are':' is'} still open. Pending offers stay live. I can add a shift bonus (a peer approves it) or mark the rest unable to fill.
+      <div class="actRow"><button class="actBtn" onclick="toast('Bonus round: the agent drafts it and routes it to a peer for approval')">Add a bonus</button><button class="actBtn" onclick="hist('Marked unable to fill');toast('Gap flagged to the shift lead')">Unable to fill</button></div>`);
   S.flowBusy=false;
 }
+function hist(t,by,sub){(S.hist=S.hist||[]).unshift({t:new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}),title:t,by:by||'Maya Rivers',sub:sub||''})}
+function showHist(){let d=document.getElementById('chist');if(d){d.remove();return}d=document.createElement('div');d.id='chist';d.className='chist';
+  d.innerHTML=`<div class="hh"><b>Request history</b><button onclick="document.getElementById('chist').remove()">✕</button></div>${(S.hist||[]).length?S.hist.map(h=>`<div class="he"><i></i><div><b>${h.title}</b><small>${h.by} · ${h.t}${h.sub?' · '+h.sub:''}</small></div></div>`).join(''):'<p style="opacity:.6;font-size:13px">Nothing yet. Start the request to see each step logged.</p>'}`;
+  $('#app').appendChild(d)}
 function celebrate(){
   if(S.theme==='casino'){
     const rain=document.createElement('div');rain.className='rain';
@@ -1130,6 +1148,21 @@ function gate(){
 }
 gate();
 addEventListener('hashchange',()=>{const h=location.hash.replace('#','');if((h==='healthcare'||h==='casino')&&h!==S.theme)switchTheme(h)});
+</script>
+<script>
+(function(){if(!window.DM)return;
+ const _hu=hospitalUnits;hospitalUnits=function(){_hu();if(DM.full)return;const el=$('#v-floor');const c=cfg();
+  const pill=el.querySelector('.ph .pill');if(pill)pill.textContent=S.filled?'All units at template':'1 unit below template';
+  el.querySelectorAll('.floorSlab').forEach(f=>{const u=c.units.find(x=>x.k===f.dataset.u);const g=u.gap&&!S.filled;const now=u.gap?(S.filled?6:4):u.rn;
+    f.querySelector('.slab').innerHTML=Array.from({length:u.need},(_,b)=>`<i style="background:${b<now?'#0ea5a4':'#e5484d'};opacity:${b<now?.85:1}"></i>`).join('')});
+  const sel=c.units.find(u=>u.k===S.selUnit);const r=el.querySelector('.ratio > div:last-child');
+  if(r){const gap=sel.gap&&!S.filled,now=sel.gap?(S.filled?6:4):sel.rn;r.innerHTML=`<div>RNs vs template <b style="font-size:18px;color:${gap?'#e5484d':'#0b7a78'}">${now}/${sel.need}</b></div><div style="color:#4b6175">Template: ${sel.need} RNs on nights · census not connected</div>`}
+  const bg=el.querySelector('.bedGrid');if(bg){const lab=bg.previousElementSibling;if(lab)lab.remove();bg.outerHTML=`<div class="dmHintC"><span class="dmBadge" style="color:#b45309;background:#fdecc8;border-color:#e9b860">Roster only</span> Bed census isn’t connected. With EHR census I’d staff to the nurse-to-patient ratio instead of a fixed template.</div>`}};
+ const _hp=hospitalPulse;hospitalPulse=function(){_hp();if(DM.full)return;document.querySelectorAll('#app *').forEach(e=>{if(e.children.length===0&&/OF REQUIRED RN HOURS|of required RN hours/i.test(e.textContent))e.textContent='of template RN hours'})};
+ const st=document.createElement('style');st.textContent='.dmHintC{margin-top:16px;font-size:12px;line-height:1.5;color:#4b6175;padding:10px 12px;border-radius:12px;border:1px dashed #e9b860;background:#fff8e6}.dmHintC .dmBadge{margin-right:6px}';document.head.appendChild(st);
+ setInterval(()=>{const h=document.getElementById('histBtn2');if(h&&!h.parentNode.querySelector('.dmT'))DM.mount(h,{before:true})},400);
+ DM.on(()=>{renderAll();renderRail();toast(DM.roster?'Roster only: requirement comes from your staffing template':'Ops data on: requirement follows demand')});
+})();
 </script>
 </body>
 </html>

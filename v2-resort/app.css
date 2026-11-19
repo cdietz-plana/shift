@@ -98,8 +98,8 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .k-proposal{background:rgba(34,211,238,.15);color:#67e8f9}.k-conflict{background:rgba(245,158,11,.18);color:#fcd34d}.k-approval{background:rgba(167,139,250,.2);color:#c4b5fd}
 
 .npc{position:absolute;left:26px;bottom:22px;width:430px;z-index:20;display:flex;gap:14px;align-items:flex-end}
-.npc .orb{flex:0 0 66px;height:66px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#efe9ff,#8b6cff 42%,#3b1d9a 78%);box-shadow:0 0 40px rgba(124,92,255,.8);position:relative;animation:orbb 3.5s ease-in-out infinite}
-.npc .orb::after{content:'';position:absolute;inset:-7px;border-radius:50%;background:repeating-conic-gradient(rgba(243,215,122,.9) 0 7deg,transparent 7deg 22.5deg);-webkit-mask:radial-gradient(circle,transparent 37px,#000 38px,#000 40px,transparent 41px);mask:radial-gradient(circle,transparent 37px,#000 38px,#000 40px,transparent 41px);animation:spin 30s linear infinite}
+.npc .orb{flex:0 0 84px;height:84px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#efe9ff,#8b6cff 42%,#3b1d9a 78%);box-shadow:0 0 40px rgba(124,92,255,.8);position:relative;animation:orbb 3.5s ease-in-out infinite}
+.npc .orb::after{content:'';position:absolute;inset:-7px;border-radius:50%;background:repeating-conic-gradient(rgba(243,215,122,.9) 0 7deg,transparent 7deg 22.5deg);-webkit-mask:radial-gradient(circle,transparent 46px,#000 47px,#000 49px,transparent 50px);mask:radial-gradient(circle,transparent 46px,#000 47px,#000 49px,transparent 50px);animation:spin 30s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes orbb{50%{transform:translateY(-4px)}}
 .npc .say{flex:1;border-radius:18px 18px 18px 4px;padding:13px 15px;background:rgba(8,8,24,.88);border:1px solid rgba(255,255,255,.14);font-size:13px;line-height:1.5;backdrop-filter:blur(10px)}
@@ -127,7 +127,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .dchip{font-size:12px;font-weight:700;padding:8px 13px;border-radius:999px}
 .aiCard{position:absolute;right:24px;bottom:22px;width:400px;border-radius:20px;padding:16px 18px;z-index:30}
 .aiCard .k{font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;display:flex;align-items:center;gap:8px}
-.aiCard .k i{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#efe9ff,#8b6cff 45%,#3b1d9a);box-shadow:0 0 10px rgba(124,92,255,.8)}
+.aiCard .k i{position:relative;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#efe9ff,#8b6cff 45%,#3b1d9a);box-shadow:0 0 10px rgba(124,92,255,.8)}
 .aiCard h4{font-size:16px;margin-top:8px;line-height:1.3}
 .aiCard p{font-size:12.5px;margin-top:6px;line-height:1.5;opacity:.8}
 .aiCard .acts{display:flex;gap:8px;margin-top:12px}
@@ -137,3 +137,17 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .toast{position:absolute;left:50%;top:86px;transform:translate(-50%,-10px);opacity:0;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:700;transition:all .4s;pointer-events:none;z-index:200;background:rgba(8,8,24,.92);border:1px solid rgba(255,255,255,.15);color:#fff}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .wipe{position:absolute;inset:0;z-index:150;pointer-events:none;background:radial-gradient(circle at var(--x,50%) var(--y,50%),transparent 0,#04050c 0);opacity:0}
+
+/* standard decision dialog (conflicts and schedule changes, every department) */
+.dec{position:absolute;inset:0;z-index:300;display:grid;place-items:center;background:rgba(4,5,14,.55);backdrop-filter:blur(6px);animation:fadeIn .25s both}
+.decb{width:560px;border-radius:24px;padding:22px 24px;background:linear-gradient(170deg,#171a30,#0d0f1e);border:1px solid rgba(255,255,255,.12);border-top:4px solid var(--fa);color:#eef0ff;font-family:Inter,sans-serif;box-shadow:0 40px 80px rgba(0,0,0,.5)}
+.decb .k{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:rgba(238,240,255,.65)}
+.decb .k i{width:9px;height:9px;border-radius:50%}
+.decb h3{font-size:21px;margin-top:8px}.decb .s{font-size:13px;color:rgba(238,240,255,.65);margin-top:4px;line-height:1.5}
+.dag{display:flex;align-items:center;gap:12px;margin:16px 0 12px;font-size:13px;line-height:1.5}
+.dag .fo{position:relative;width:40px;height:40px;flex:0 0 40px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#efe9ff,#8b6cff 45%,#3b1d9a);box-shadow:0 0 12px rgba(124,92,255,.7)}
+.dopt{display:block;width:100%;text-align:left;margin-top:10px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:inherit;position:relative;transition:border-color .2s,background .2s}
+.dopt:hover{border-color:var(--fa);background:rgba(255,255,255,.07)}
+.dopt b{display:block;font-size:14px}.dopt span{display:block;font-size:12.5px;color:rgba(238,240,255,.65);margin-top:4px;line-height:1.45;padding-right:90px}
+.dopt .rec{position:absolute;right:14px;top:14px;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;background:rgba(52,211,153,.2);color:#6ee7b7;padding-right:8px}
+@keyframes fadeIn{from{opacity:0}}

@@ -16,21 +16,33 @@ const DEPTS={
 };
 /* missions = the CTAs on the dashboard. moves animate tokens across the map (from -> to). */
 const MISSIONS=[
- {id:'sec',d:'sec',kind:'proposal',n:8,t:'Arena entry is 8 officers short',p:'5 internal officers on overtime within the 12 hr limit, plus 3 contract officers from the approved vendor.',when:'Sat 4 PM – 1 AM',moves:[['sec','sec',5],['vendor','sec',3]]},
- {id:'valet',d:'valet',kind:'proposal',n:6,t:'Valet needs 6 more attendants',p:'4 bell staff from the Front Office with valet clearance, plus 2 on-call shifts.',when:'Sat 5 PM – 12 AM',moves:[['front','valet',4],['valet','valet',2]]},
- {id:'front',d:'front',kind:'proposal',n:3,t:'Front desk is short for the arrival wave',p:'Shift 2 concierge agents to the desk and borrow 1 Players Club rep who knows the system.',when:'Sat 2 PM – 6 PM',moves:[['front','front',2],['mkt','front',1]]},
- {id:'evs',d:'evs',kind:'proposal',n:4,t:'Arena teardown crew is 4 short',p:'Offer the overnight teardown to 4 house porters from Housekeeping who are under weekly hours.',when:'Sun 12 AM – 4 AM',moves:[['hk','evs',4]]},
- {id:'casino',d:'casino',kind:'proposal',n:2,t:'High Limit Baccarat: 2 open tables tonight',p:'Riley Chen and Morgan Reyes. Both certified, free, no overtime. Run it from the casino floor.',when:'Tonight 8 PM – 4 AM',moves:[['casino','casino',2]]},
- {id:'steak',d:'steak',kind:'proposal',n:2,t:'Ember & Oak needs 2 servers',p:'Jane Doe from the Front Desk (cross-trained, food handler card current) and Sam Patel from The Market.',when:'Sat 5 PM – 11 PM',moves:[['front','steak',1],['market','steak',1]]},
- {id:'mkt',d:'mkt',kind:'proposal',n:2,t:'VIP check-in needs 2 hosts',p:'2 casino hosts who already know the VIP list. Back on the floor by 7 PM.',when:'Sat 3 PM – 7 PM',moves:[['casino','mkt',2]]},
- {id:'shop',d:'shop',kind:'proposal',n:1,t:'Resort Shop is 1 associate short',p:'Extend Mia Lopez by 2 hours. Stays under 10 hrs for the day.',when:'Sat 6 PM – 10 PM',moves:[['shop','shop',1]]},
- {id:'slots',d:'slots',kind:'conflict',n:0,t:'Drew Singh is double-booked',p:'On-call slot tech and grounds event setup at the same time. Keep the on-call shift, give setup to Avery Kim.',when:'Sat 3 PM – 7 PM',moves:[['grounds','grounds',1]]},
- {id:'appr',d:'valet',kind:'approval',n:0,t:'Approve a $75 valet bonus',p:'Taylor Brooks, Bell & Valet manager, requested a shift bonus for fight night. Needs a second manager.',when:'Sat',moves:[]},
- {id:'hk',d:'hk',kind:'proposal',n:0,t:'Sunday checkout: 1,140 departures',p:'Start 14 room attendants at 7 AM instead of 9 AM. No extra hours, rooms ready by 3 PM check-in.',when:'Sun 7 AM',moves:[['hk','hk',3]]}
+ {id:'sec',d:'sec',kind:'request',n:8,t:'Arena entry is 8 officers short',p:'5 internal officers within the 12 hr limit, plus 3 licensed officers from the approved vendor.',when:'Sat 4 PM – 1 AM'},
+ {id:'valet',d:'valet',kind:'request',n:6,t:'Valet needs 6 more attendants',p:'Bell staff from the Front Office with valet clearance, plus on-call valets.',when:'Sat 5 PM – 12 AM'},
+ {id:'front',d:'front',kind:'request',n:3,t:'Front desk is short for the arrival wave',p:'2 concierge agents to the desk, plus 1 Players Club rep who knows the system.',when:'Sat 2 PM – 6 PM'},
+ {id:'evs',d:'evs',kind:'request',n:4,t:'Arena teardown crew is 4 short',p:'House porters from Housekeeping who are under weekly hours.',when:'Sun 12 AM – 4 AM'},
+ {id:'casino',d:'casino',kind:'request',n:2,t:'High Limit Baccarat: 2 open tables tonight',p:'4 certified dealers are free. More may say yes than you need.',when:'Tonight 8 PM – 4 AM'},
+ {id:'steak',d:'steak',kind:'request',n:2,t:'Ember & Oak needs 2 servers',p:'Cross-trained Front Desk staff and servers from The Market. Union seniority applies.',when:'Sat 5 PM – 11 PM'},
+ {id:'mkt',d:'mkt',kind:'request',n:2,t:'VIP check-in needs 2 hosts',p:'2 casino hosts who already know the VIP list.',when:'Sat 3 PM – 7 PM'},
+ {id:'shop',d:'shop',kind:'request',n:1,t:'Resort Shop is 1 associate short',p:'Extend Mia Lopez by 2 hours. Stays under 10 hrs for the day.',when:'Sat 6 PM – 10 PM'},
+ {id:'jane',d:'front',kind:'conflict',n:0,t:'Jane Doe is wanted in two places',p:'Front Desk has Jane until 6 PM. Ember & Oak wants her from 5 PM for Section 6.',when:'Sat 5 PM – 6 PM',
+  opts:[['Start Jane at Ember & Oak at 6 PM','Nia Brooks covers the desk from 5 to 6. Ember & Oak runs Section 6 with Lena until Jane arrives.',1],['Keep Jane on the desk','Ember & Oak offers Section 6 to the next server in seniority order.',0]]},
+ {id:'slots',d:'slots',kind:'conflict',n:0,t:'Drew Singh is double-booked',p:'On-call slot tech and grounds event setup at the same time.',when:'Sat 3 PM – 7 PM',
+  opts:[['Keep Drew on call, give setup to Avery Kim','Avery is free after 3 PM and set up the terrace last month.',1],['Move Drew to setup, call in Em Rao','Em would start 3 hours early and go into overtime.',0]]},
+ {id:'hk',d:'hk',kind:'change',data:true,n:0,t:'Sunday checkout: 1,140 departures',p:'Start 14 room attendants at 7 AM instead of 9 AM. Same hours, rooms ready by 3 PM.',when:'Sun 7 AM',
+  opts:[['Move 14 start times to 7 AM','I\u2019ll ask each attendant to confirm the earlier start. Nobody\u2019s hours change.',1],['Keep the 9 AM start','About 210 rooms will not be ready for 3 PM check-in.',0]]}
 ];
 const STATE={resolved:new Set(),filter:'all'};
-function openFor(d){return MISSIONS.filter(m=>m.d===d&&!STATE.resolved.has(m.id)).reduce((a,m)=>a+m.n,0)}
-function issuesFor(d){return MISSIONS.filter(m=>m.d===d&&!STATE.resolved.has(m.id)).length}
-function totalOpen(){return MISSIONS.filter(m=>!STATE.resolved.has(m.id)).reduce((a,m)=>a+m.n,0)}
+/* MAP: which themed world each department uses ('none' = not on the map). Set by Resort setup. */
+const MAP={};Object.keys(DEPTS).forEach(k=>MAP[k]=DEPTS[k].screen);
+const on=k=>!!MAP[k]&&MAP[k]!=='none';
+const isReq=m=>m.kind==='request';
+const stOf=m=>(typeof REQ!=='undefined'&&REQ[m.id]&&REQ[m.id].st)||null;
+const filledOf=m=>{const st=stOf(m);return st?st.assigned.reduce((a,c)=>a+c.n,0):0};
+const isDone=id=>{const m=MISSIONS.find(x=>x.id===id);if(!m)return true;if(isReq(m)){const st=stOf(m);return !!st&&(st.status==='FILLED'||st.status==='UNABLE_TO_FILL')}return STATE.resolved.has(id)};
+const vis=m=>!(m.data&&window.DM&&DM.roster);
+const mlive=m=>on(m.d)&&vis(m)&&!isDone(m.id);
+function openFor(d){return MISSIONS.filter(m=>m.d===d&&mlive(m)).reduce((a,m)=>a+Math.max(0,m.n-filledOf(m)),0)}
+function issuesFor(d){return MISSIONS.filter(m=>m.d===d&&mlive(m)).length}
+function totalOpen(){return MISSIONS.filter(mlive).reduce((a,m)=>a+Math.max(0,m.n-filledOf(m)),0)}
 function coverage(){return Math.round((100-totalOpen()*0.27)*10)/10}
 const TOTAL_NEEDED=911;

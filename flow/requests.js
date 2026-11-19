@@ -1,0 +1,62 @@
+/* Shared coverage requests used by every concept (fictional names only).
+   Mirrors the product: AI drafts, manager confirms, optional peer approval,
+   eligibility, outreach, worker accept/decline, manager assigns, no overfill. */
+const REQ={
+ sec:{dept:'sec',deptName:'Security',c:'#60a5fa',
+  callout:'Arena entry needs 8 more officers for fight night, Gates A to C, 4 PM to 1 AM.',
+  hl:[['8 more officers','need'],['Gates A to C','loc'],['4 PM to 1 AM','when'],['fight night','when']],
+  role:'Security Officer',loc:'Arena · Gates A to C',when:'Sat 4:00 PM – 1:00 AM',need:8,quals:['Guard card','Crowd management'],incentive:0,
+  cands:[['Kai Lowe','sec','Officer · 32 hrs','ok','accept',94],['Noor Haddad','sec','Officer · 36 hrs · 3 hrs OT','ok','accept',90],['Remy Vale','sec','Officer · 28 hrs','ok','accept',92],
+   ['Ellis Park','sec','Officer · 30 hrs','ok','accept',91],['Jules Ortiz','sec','Officer · 26 hrs','ok','decline',88],['Rae Quinn','sec','Officer · 34 hrs','ok','accept',86],
+   ['Northgate Security ×3','vendor','Approved vendor · licensed','ok','accept',80,3],
+   ['Sky Bell','sec','Guard card expired Nov 2','no'],['Dana Fox','sec','Already supervising Gate D','no']]},
+ valet:{dept:'valet',deptName:'Bell & Valet',c:'#22d3ee',
+  callout:'Valet is going to be 6 attendants short Saturday night, 5 PM to midnight, with fight night arrivals.',
+  hl:[['6 attendants','need'],['Saturday night','when'],['5 PM to midnight','when'],['Valet','role']],
+  role:'Valet Attendant',loc:'Porte-cochère',when:'Sat 5:00 PM – 12:00 AM',need:6,quals:['Valet driving clearance'],incentive:0,
+  cands:[['Tess Ward','front','Bell staff · Front Office','ok','accept',92],['Omar Diaz','front','Bell staff · Front Office','ok','accept',90],['Lia Park','front','Bell staff · Front Office','ok','decline',89],
+   ['Ben Cole','front','Bell staff · Front Office','ok','accept',88],['Max Reed','valet','On-call valet','ok','accept',85],['Ivy Lane','valet','On-call valet','ok','decline',84],
+   ['Cy Dunn','valet','No valet driving clearance','no']],
+  next:{t:'Add the $75 shift bonus Taylor requested',p:'Two more yeses cover it. Lia and Ivy said they\u2019d take it with a bonus. A bonus needs a second manager to approve, so I’ll send it to Taylor Brooks first.',approval:true,incentive:75,
+   cands:[['Lia Park','front','Bell staff · re-offer with bonus','ok','accept',89],['Ivy Lane','valet','On-call valet · re-offer with bonus','ok','accept',84]]}},
+ front:{dept:'front',deptName:'Front Desk',c:'#a78bfa',
+  callout:'The front desk is short 3 agents for the Saturday arrival wave, roughly 2 to 6 PM.',
+  hl:[['3 agents','need'],['Saturday','when'],['2 to 6 PM','when'],['front desk','loc']],
+  role:'Front Desk Agent',loc:'Hotel Lobby',when:'Sat 2:00 PM – 6:00 PM',need:3,quals:['Opera PMS trained'],incentive:0,
+  cands:[['Nia Brooks','front','Concierge · PMS trained','ok','accept',93],['Theo Grant','front','Concierge · PMS trained','ok','accept',91],['Ari Stone','mkt','Players Club · PMS trained','ok','accept',86],['Pat Lin','front','Still in PMS training','no']]},
+ evs:{dept:'evs',deptName:'Facilities & EVS',c:'#2dd4bf',
+  callout:'Arena teardown after the fight needs 4 more crew, midnight to 4 AM.',
+  hl:[['4 more crew','need'],['midnight to 4 AM','when'],['Arena teardown','loc']],
+  role:'EVS Crew',loc:'Arena · Sections 121 to 124',when:'Sun 12:00 AM – 4:00 AM',need:4,quals:['Chemical handling'],incentive:0,
+  cands:[['Hana Cho','hk','House porter · 30 hrs','ok','accept',90],['Leo Marsh','hk','House porter · 28 hrs','ok','accept',89],['Mae Ruiz','hk','House porter · 32 hrs','ok','accept',88],['Gus Hale','hk','House porter · 24 hrs','ok','accept',87],['Ray Kim','hk','Would reach 58 of 60 hrs','no']]},
+ casino:{dept:'casino',deptName:'Casino Floor',c:'#f3d77a',
+  callout:'Two Baccarat tables in High Limit have no dealer tonight, 8 PM to 4 AM.',
+  hl:[['Two Baccarat tables','need'],['High Limit','loc'],['8 PM to 4 AM','when'],['tonight','when']],
+  role:'Baccarat Dealer',loc:'High Limit Salon',when:'Tonight 8:00 PM – 4:00 AM',need:2,quals:['Baccarat certified','Gaming license'],incentive:0,
+  cands:[['Riley Chen','casino','Certified · 30 hrs','ok','accept',96],['Morgan Reyes','casino','Certified · 24 hrs','ok','accept',93],['Parker Hale','casino','Certified · 37 hrs · 4 hrs OT','ok','decline',84],['Casey Nguyen','casino','Certified · 38 hrs · 6 hrs OT','ok','accept',80],['Jordan Blake','casino','Already on BAC-1 tonight','no'],['Jane Roe','casino','Not Baccarat certified','no']]},
+ steak:{dept:'steak',deptName:'Ember & Oak',c:'#fb923c',
+  callout:'Ember & Oak needs 2 more servers Saturday dinner, 5 to 11 PM. Sections 5 and 6 are open.',
+  hl:[['2 more servers','need'],['Saturday dinner','when'],['5 to 11 PM','when'],['Ember & Oak','loc']],
+  role:'Server',loc:'Ember & Oak · Sections 5 and 6',when:'Sat 5:00 PM – 11:00 PM',need:2,quals:['Food handler card','Fine dining service'],incentive:0,
+  cands:[['Jane Doe','front','Front Desk · F&B cross-trained','ok','accept',90],['Sam Patel','market','The Market · server','ok','accept',88],['Lena Brooks','market','The Market · server','ok','accept',85],['Owen Clark','steak','Already on Section 4','no']]},
+ mkt:{dept:'mkt',deptName:'Marketing & Events',c:'#e879f9',
+  callout:'VIP check-in needs 2 more hosts Saturday, 3 to 7 PM.',
+  hl:[['2 more hosts','need'],['Saturday','when'],['3 to 7 PM','when'],['VIP check-in','loc']],
+  role:'VIP Host',loc:'VIP Lounge',when:'Sat 3:00 PM – 7:00 PM',need:2,quals:['VIP list access'],incentive:0,
+  cands:[['Vera Moss','casino','Casino host','ok','accept',91],['Jon Price','casino','Casino host','ok','accept',89],['Kim Lee','casino','On the floor until 8 PM','no']]},
+ shop:{dept:'shop',deptName:'Resort Shop',c:'#f472b6',
+  callout:'The shop needs 1 more associate for the fight night merch rush, 6 to 10 PM.',
+  hl:[['1 more associate','need'],['6 to 10 PM','when'],['merch rush','when']],
+  role:'Sales Associate',loc:'Resort Shop',when:'Sat 6:00 PM – 10:00 PM',need:1,quals:['POS trained'],incentive:0,
+  cands:[['Mia Lopez','shop','Extend 2 hrs · stays under 10 hrs','ok','accept',95],['Noah Bell','shop','Already on register 2','no']]}
+};
+Object.values(REQ).forEach(r=>{r.cands=r.cands.map(a=>({name:a[0],from:a[1],note:a[2],ok:a[3]==='ok',resp:a[4],fit:a[5],n:a[6]||1}));if(r.next)r.next.cands=r.next.cands.map(a=>({name:a[0],from:a[1],note:a[2],ok:true,resp:a[4],fit:a[5],n:a[6]||1}))});
+
+/* decision factors for the "Your call" step: seniority (yrs), extra shifts last 30 days, overtime hrs, asked for more hours */
+const FACT={'Riley Chen':[6,1,0,0],'Morgan Reyes':[3,0,0,1],'Casey Nguyen':[8,4,6,0],'Parker Hale':[5,2,4,0],
+ 'Jane Doe':[4,2,0,0],'Sam Patel':[2,0,0,1],'Lena Brooks':[5,3,0,0]};
+const POLICY={casino:{rule:'House rule: avoid overtime over 4 hrs, then fewest extra shifts, then seniority',pick:['Riley Chen','Morgan Reyes'],
+   why:'Casey is the most senior, but this shift would put Casey at 6 hours of overtime. Riley and Morgan cover it with no overtime, and Morgan asked for more hours this month.'},
+ steak:{rule:'Union agreement (Culinary & Bartenders): extra shifts go in seniority order',pick:['Lena Brooks','Jane Doe'],
+   why:'Seniority order is Lena (5 yrs), then Jane (4 yrs), then Sam (2 yrs). Sam has had the fewest extra shifts and asked for more hours, so I\u2019ll put him first in line for the next opening. You can override this with a note.'}};
+Object.values(REQ).forEach(r=>r.cands.forEach(c=>{const f=FACT[c.name];if(f)c.f={sen:f[0],extra:f[1],ot:f[2],wants:f[3]}}));

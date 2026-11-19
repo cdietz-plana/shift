@@ -196,3 +196,121 @@
 .newd{animation:newd 1.2s cubic-bezier(.3,1.4,.5,1) both}
 @keyframes newd{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:none}}
 .hotel .aiCard{right:316px!important;bottom:44px!important;width:300px!important}
+
+/* =========================================================
+   STANDARD DEPARTMENT FRAME (same in every building)
+   row 1: back · title · chips      (top 18, stops at the rail)
+   row 2: themed view switcher      (top 86, left 24)
+   stage: themed content            (left 24, top 140, 1156 wide)
+   rail : agent · needs you · roster (right 24, 372 wide, full height)
+   ========================================================= */
+#dept .dchrome{right:416px}
+.subnav{position:absolute;left:24px;top:84px;height:48px;display:flex;align-items:center;gap:14px;z-index:25}
+.rail2{position:absolute;right:24px;top:18px;bottom:22px;width:372px;border-radius:22px;padding:16px 16px 12px;z-index:40;display:flex;flex-direction:column;
+  --rb:rgba(12,14,28,.82);--rt:#eef1ff;--rm:rgba(238,241,255,.62);--rl:rgba(255,255,255,.1);--rc:rgba(255,255,255,.05);--ra:#8b6cff;--rbt:#fff;--rbf:#0b0d1a;
+  background:var(--rb);color:var(--rt);border:1px solid var(--rl);backdrop-filter:blur(16px);box-shadow:0 24px 50px rgba(0,0,0,.35);font-family:Inter,sans-serif}
+.rail2 .rh{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--rl)}
+.rail2 .rf{position:relative;width:46px;height:46px;flex:0 0 46px;border-radius:50%}
+.rail2 .rh b{font-size:15px;display:block}.rail2 .rh small{font-size:12px;color:var(--rm)}
+.rsec{font-size:10.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--rm);margin:14px 2px 8px;display:flex;justify-content:space-between}
+.rsec small{font-size:10px;letter-spacing:.5px;text-transform:none;font-weight:600}
+.rcards{display:flex;flex-direction:column;gap:10px;max-height:388px;overflow:auto;padding-right:2px;flex:0 0 auto}
+.rc{border-radius:16px;padding:12px 14px;background:var(--rc);border:1px solid var(--rl)}
+.rc .rt{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--rm)}
+.rc .rt i{width:8px;height:8px;border-radius:50%}
+.rc .rt span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc .rt em{font-style:normal;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;letter-spacing:.3px}
+.rc em.draft{background:rgba(139,108,255,.2);color:#c4b5fd}.rc em.live{background:rgba(34,211,238,.18);color:#67e8f9}
+.rc em.wait{background:rgba(245,158,11,.2);color:#fbbf24}.rc em.warn{background:rgba(255,61,110,.2);color:#ff8fab}.rc em.ok{background:rgba(52,211,153,.2);color:#6ee7b7}
+.rc h5{font-size:14px;margin-top:7px;line-height:1.3}
+.rc p{font-size:12px;color:var(--rm);margin-top:4px;line-height:1.45}
+.rbar{height:5px;border-radius:3px;background:var(--rl);margin-top:9px;overflow:hidden}.rbar u{display:block;height:100%;background:linear-gradient(90deg,#34d399,#22d3ee);transition:width .8s}
+.rnum{display:flex;justify-content:space-between;font-size:10.5px;color:var(--rm);margin-top:5px}
+.rbtn{margin-top:10px;width:100%;font-size:12.5px;font-weight:800;padding:9px 12px;border-radius:11px;background:var(--rbt);color:var(--rbf);transition:transform .15s}
+.rbtn:hover{transform:translateY(-1px)}
+.rc.done{opacity:.72}.rc.done h5{font-size:13px}
+.rax{position:relative;height:14px;margin-left:128px;font-size:9.5px;color:var(--rm);font-family:'JetBrains Mono'}
+.rax span{position:absolute;transform:translateX(-50%)}
+.rros{flex:1;overflow:auto;min-height:0}
+.rr{display:flex;align-items:center;height:34px;border-bottom:1px solid var(--rl);font-size:12px}
+.rr .nm{width:128px;flex:0 0 128px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.rr .nm small{display:block;font-size:10px;color:var(--rm);font-weight:500;overflow:hidden;text-overflow:ellipsis}
+.rr .tr{flex:1;position:relative;height:12px;background:var(--rl);border-radius:6px}
+.rr .tr u{position:absolute;top:0;bottom:0;border-radius:6px;background:var(--ra);opacity:.75}
+.rr.new .tr u{background:#34d399;opacity:1;animation:pop2 .6s cubic-bezier(.3,1.6,.5,1)}.rr.new .nm{color:#34d399}
+.rr.open .tr u{background:transparent;border:1.5px dashed #ff6b8b;animation:gapP 1.3s infinite}.rr.open .nm{color:#ff8fab}
+.rr.conf .tr u{background:#ff3d6e}.rr.conf .nm{color:#ff8fab}
+/* per-theme rail paint (structure never changes) */
+.hotel .rail2{--rb:#14213d;--rl:rgba(233,211,162,.18);--rc:rgba(255,255,255,.04);--ra:#e9d3a2;--rbt:#e9d3a2;--rbf:#14213d;--rm:rgba(247,243,234,.65);border-color:#c9ad7a}
+.hotel .rail2 .rh b,.hotel .rail2 .rc h5{font-family:'Playfair Display',serif}
+.dining .rail2{--rb:linear-gradient(170deg,#f6ead2,#ead7b2);--rt:#2a1a0c;--rm:#7a5a30;--rl:rgba(42,26,12,.14);--rc:rgba(255,255,255,.45);--ra:#8a5a20;--rbt:#2a1a0c;--rbf:#f6e3bd;border-color:#c9a978}
+.dining .rail2 .rh b,.dining .rail2 .rc h5{font-family:'Cormorant Garamond',serif;font-size:19px}
+.retail .rail2{--rb:#3a1430;--ra:#f9a8d4;--rbt:#fff;--rbf:#3a1430;--rl:rgba(249,168,212,.2);border-color:#f9a8d4}
+.retail .rail2 .rh b,.retail .rail2 .rc h5{font-family:Fredoka,sans-serif}
+.ops .rail2{--rb:linear-gradient(160deg,rgba(15,37,64,.85),rgba(20,16,48,.85));--ra:#22d3ee;border-color:rgba(34,211,238,.35)}
+.casino .rail2{--rb:linear-gradient(170deg,#1a0f08,#0c0805);--rl:rgba(212,175,55,.22);--rc:rgba(212,175,55,.06);--ra:#d4af37;--rbt:linear-gradient(180deg,#f4e3aa,#d4af37);--rbf:#1a0f08;--rm:rgba(244,227,170,.65);border:1px solid #8a6a36}
+.casino .rail2 .rh b,.casino .rail2 .rc h5{font-family:'Playfair Display',serif}
+
+/* hotel: the elevator panel becomes the row-2 switcher; the shaft is the stage */
+.shaft{top:140px;width:1156px}
+.epanel{left:24px;right:auto;top:82px;bottom:auto;width:1156px;height:52px;padding:0 18px;border-radius:16px;display:flex;align-items:center;gap:16px;z-index:25}
+.epanel .screw{display:none}
+.epanel .ind{height:38px;padding:0 14px;gap:8px;flex:0 0 auto;border-radius:10px}
+.epanel .ind b{font-size:26px}.epanel .ind i{font-size:13px}
+.epanel .ebtns{display:flex;gap:12px;margin:0;flex:1}
+.epanel .ebtn{width:40px;height:40px;font-size:14px;box-shadow:0 3px 0 #7a5a2a,0 5px 8px rgba(0,0,0,.2),inset 0 0 0 2px rgba(255,255,255,.35)}
+.epanel .ebtn.on{box-shadow:0 3px 0 #7a5a2a,0 0 0 3px #ffb648,0 0 16px rgba(255,170,60,.8)}
+.epanel .ebtn small{display:none}.epanel .ebtn .dot{width:10px;height:10px;top:0;right:0}
+.epanel .ebell{margin:0;flex-direction:row;gap:8px}.epanel .ebell svg{width:40px;height:30px}
+.desk{top:84px}.hchart{top:396px;height:296px;width:580px}.kcards{left:640px;top:396px}
+.rooms{width:800px}.hcard{left:850px;width:280px}
+/* dining */
+.dining .subnav .venues{display:flex;gap:6px;padding-right:14px;border-right:1px solid rgba(214,173,96,.3)}
+.dining .subnav .venues button{font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid rgba(214,173,96,.35);color:#e8c98a}
+.dining .subnav .venues button.on{background:#e8c98a;color:#1d120a}
+.dining .courses{position:static;transform:none}
+.dview{top:140px}.droom{left:24px;width:1156px}
+/* retail */
+.awning{right:416px;top:140px;height:36px}.awning::after{bottom:-16px;height:16px}
+.window{right:416px;top:190px}
+.retail .subnav .tags{display:flex;gap:6px}
+.retail .subnav button{font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:999px;background:#fff;color:#be185d;border:1px solid #fbcfe8}
+.retail .subnav button.on{background:#be185d;color:#fff;border-color:#be185d}
+.regs{width:730px;gap:14px;top:110px!important}.reg{height:290px;padding:14px 10px}.ntag{width:140px}
+.receipt{right:26px;width:300px;top:30px}
+/* ops */
+.ochips{position:static}
+.oviz{top:140px;width:1156px}
+.oviz svg{max-height:590px}
+/* casino: the felt lives only here */
+.casino .scr{background:radial-gradient(ellipse at 40% 0%,#2a1a0c 0%,#120a05 55%,#070403 100%);color:#f4e3aa;font-family:Inter,sans-serif}
+.casino .backBtn{border:1px solid #8a6a36;color:#f4e3aa;background:rgba(212,175,55,.08)}
+.casino .dtitle b{font-family:'Playfair Display',serif;font-size:28px;color:#f4e3aa}
+.casino .dtitle small{color:#c9a978;opacity:1}
+.casino .dchip.gold{background:linear-gradient(180deg,#f4e3aa,#d4af37);color:#1a0f08}
+.cnav{display:flex;gap:8px}
+.cnav button{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800;padding:9px 16px;border-radius:999px;color:#f4e3aa;border:1px solid #8a6a36;background:rgba(0,0,0,.3)}
+.cnav button.on{background:linear-gradient(180deg,#f4e3aa,#d4af37);color:#1a0f08;border-color:#f4e3aa}
+.cnav em{font-style:normal;font-size:10.5px;padding:1px 7px;border-radius:999px;background:#b3261e;color:#fff}
+.felt{position:absolute;left:24px;top:140px;width:1156px;bottom:22px;border-radius:120px/90px;padding:26px 60px;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 40%,#1f7a4a 0%,#0f5132 55%,#093822 100%);border:14px solid #3b2414;
+  box-shadow:0 0 0 3px #8a6a36,inset 0 0 0 2px rgba(212,175,55,.4),inset 0 0 120px rgba(0,0,0,.55),0 30px 60px rgba(0,0,0,.5)}
+.felt::before{content:'';position:absolute;inset:0;opacity:.18;background-image:radial-gradient(rgba(255,255,255,.4) 1px,transparent 1px);background-size:4px 4px}
+.fhead{position:relative;text-align:center}.fhead h3{font-family:'Playfair Display';font-size:28px;color:#f4e3aa;letter-spacing:1px}.fhead p{font-size:12.5px;color:rgba(244,227,170,.7);margin-top:3px}
+.cchip.drop{animation:chipDrop .7s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes chipDrop{from{transform:translateY(-140px) scale(1.3);opacity:0}}
+.felt svg .cchip{filter:drop-shadow(0 4px 4px rgba(0,0,0,.45))}
+.pitg{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+.pg{border:1.5px solid rgba(244,227,170,.3);border-radius:22px;padding:14px 16px;background:rgba(0,0,0,.12)}
+.pg h4{font-family:'Playfair Display';font-size:18px;color:#f4e3aa}
+.pgt{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.pt{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:rgba(244,227,170,.7)}
+.pitnote{position:relative;text-align:center;margin-top:18px;font-size:13px;color:rgba(244,227,170,.75)}
+
+.rail2 .rf{background:radial-gradient(circle at 35% 30%,#efe9ff,#8b6cff 45%,#3b1d9a);box-shadow:0 0 14px rgba(124,92,255,.7)}
+.rcards{max-height:440px}
+.dining .rc em.draft{background:#2a1a0c;color:#f6e3bd}.dining .rc em.warn{background:#b3261e;color:#fff}.dining .rc em.live{background:#0f766e;color:#fff}
+.dining .rc em.wait{background:#b45309;color:#fff}.dining .rc em.ok{background:#15803d;color:#fff}
+.dining .rr.new .nm{color:#15803d}.dining .rr.new .tr u{background:#15803d}.dining .rr.open .nm{color:#b3261e}.dining .rr.open .tr u{border-color:#b3261e}
+.reg{height:440px}.reg .counter{height:190px}
+.receipt{top:96px}
