@@ -23,7 +23,7 @@ const REQ={
   callout:'The front desk is short 3 agents for the Saturday arrival wave, roughly 2 to 6 PM.',
   hl:[['3 agents','need'],['Saturday','when'],['2 to 6 PM','when'],['front desk','loc']],
   role:'Front Desk Agent',loc:'Hotel Lobby',when:'Sat 2:00 PM – 6:00 PM',need:3,quals:['Opera PMS trained'],incentive:0,
-  cands:[['Nia Brooks','front','Concierge · PMS trained','ok','accept',93],['Theo Grant','front','Concierge · PMS trained','ok','accept',91],['Ari Stone','mkt','Players Club · PMS trained','ok','accept',86],['Pat Lin','front','Still in PMS training','no']]},
+  cands:[['Nia Brooks','front','Concierge · PMS trained','ok','accept',93],['Theo Grant','front','Concierge · PMS trained','ok','accept',91],['Ari Stone','mkt','Players Club · PMS trained','ok','accept',86],['Jules Hart','front','Concierge · day off','ok','none',84],['Pat Lin','front','Still in PMS training','no']]},
  evs:{dept:'evs',deptName:'Facilities & EVS',c:'#2dd4bf',
   callout:'Arena teardown after the fight needs 4 more crew, midnight to 4 AM.',
   hl:[['4 more crew','need'],['midnight to 4 AM','when'],['Arena teardown','loc']],

@@ -98,7 +98,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <svg id="disk" viewBox="0 0 800 740"></svg>
   <div class="side" id="side"></div>
   <div class="sugg" id="sugg"></div>
-  <form class="bottom" id="cmd"><div class="meter"><div class="fo faceHost" id="face"></div><input id="q" placeholder="Ask the agent: “cover Saturday”, “show me the hotel”, “who’s near overtime”"><span class="stat" id="stat"></span></div><button type="button" class="allBtn" id="all">Approve all</button></form>
+  <form class="bottom" id="cmd"><div class="meter"><div class="fo faceHost" id="face"></div><input id="q" placeholder="Ask Shifty: “cover Saturday”, “show me the hotel”, “who’s near overtime”"><span class="stat" id="stat"></span></div><button type="button" class="allBtn" id="all">Approve all</button></form>
   <div class="toast" id="toast"></div>
   <div class="tip" id="tip"></div>
   <div class="draft">V1 · Draft B · Coverage Rings · concept</div>
@@ -214,10 +214,10 @@ function sugg(){const G=document.getElementById('sugg');const f=focus,ks=deptsIn
   const order=ks.sort((a,b)=>doneK(a)-doneK(b));
   G.innerHTML=`<h3>Agent requests</h3><div class="sub">${live.length?`${live.length} for ${nm}. I drafted each one. Nothing goes out until you review it.`:`Nothing open in ${nm}.`}</div>
    <div class="plist">${order.length?order.map(k=>{const d=ALL.find(n=>n.dept===k&&n.depth===2);const r=REQ[k],st=r.st,fl=filledK(k),dn=doneK(k);
-     return `<div class="prop ${dn?'done':''}"><div class="k"><span class="fo faceHost ${dn?'happy':''}">${agentFace()}</span><span style="color:${color(d,1)}">${d.name}</span><em class="pst">${SL[st?st.status:'DRAFT']}</em></div><h4>${dn?(st.status==='FILLED'?`${r.role} · covered`:`${r.role} · ${fl} of ${r.need}`):PROPS[k][0]}</h4><p>${dn?st.assigned.map(c=>c.name).join(', '):PROPS[k][1]}</p>
+     return `<div class="prop ${dn?'done':''}"><div class="k"><span class="fo faceHost ${dn?'happy':''}">${agentFace()}</span><span style="color:${color(d,1)}">${d.name}</span><em class="pst">${SL[st?st.status:'DRAFT']}</em>${dn?'':Flow.scenTags(REQ[k])}</div><h4>${dn?(st.status==='FILLED'?`${r.role} · covered`:`${r.role} · ${fl} of ${r.need}`):PROPS[k][0]}</h4><p>${dn?st.assigned.map(c=>c.name).join(', '):PROPS[k][1]}</p>
        <div class="pbar"><u style="width:${fl/r.need*100}%"></u></div><div class="pnum"><span>${fl} of ${r.need} filled</span><span>${r.when}</span></div>
        <div class="btns">${dn?'':`<button class="ok" data-k="${k}">${st&&st.status!=='DRAFT'?'Continue':'Review'}</button>`}<button class="gh" data-z="${d.id}">Show on rings</button></div></div>`}).join('')
-    :`<div class="prop"><div class="k"><span class="fo faceHost happy">${agentFace()}</span>Coverage agent</div><h4>All covered</h4><p>Every shift in ${nm} is covered for Saturday.</p></div>`}</div>`;
+    :`<div class="prop"><div class="k"><span class="fo faceHost happy">${agentFace()}</span>Shifty</div><h4>All covered</h4><p>Every shift in ${nm} is covered for Saturday.</p></div>`}</div>`;
   G.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>review(b.dataset.k));
   G.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>zoom(ALL[+b.dataset.z]));
 }

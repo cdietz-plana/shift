@@ -97,7 +97,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   <div class="aur"><i style="left:0;top:0;width:700px;height:500px;background:#3b1d9a"></i><i style="right:0;top:200px;width:600px;height:600px;background:#0e5a6e;animation-delay:-8s"></i><i style="left:500px;bottom:-100px;width:600px;height:400px;background:#5a4410;opacity:.6;animation-delay:-14s"></i></div>
   <div class="top">
     <div class="logo"><div class="m"><i>SC</i></div><div><b>Shift Coverage</b><small>Example Resort &amp; Casino</small></div></div>
-    <form class="cmd glass" id="cmd"><div class="orb faceHost" id="orb"></div><input id="q" placeholder="Ask the agent: “cover Saturday”, “who’s near overtime”, “move a server”"><kbd>⌘K</kbd></form>
+    <form class="cmd glass" id="cmd"><div class="orb faceHost" id="orb"></div><input id="q" placeholder="Ask Shifty: “cover Saturday”, “who’s near overtime”, “move a server”"><kbd>⌘K</kbd></form>
     <span class="event">Sat Nov 21 · Fight Night</span>
     <div class="user"><div class="av">MR</div><div><b>Maya Rivers</b><small>VP, Resort Operations</small></div></div>
   </div>
@@ -187,7 +187,7 @@ function axis(){const a=document.getElementById('axis');a.innerHTML=[0,3,6,9,12,
 function cards(){
   const C=document.getElementById('cards');[...C.querySelectorAll('.pcard')].forEach(x=>x.remove());
   PROPS.forEach((p,i)=>{const d=DEPTS.find(x=>x.k===p.d);const el=document.createElement('div');el.className='pcard glass';el.dataset.d=p.d;
-    el.innerHTML=`<span class="suit ${i%4===1||i%4===2?'r':''}">${SUITS[i%4]}</span><div class="dept" style="color:${d.c}">${d.n}</div><h4>${p.t}</h4><p>${p.p}</p>
+    el.innerHTML=`<span class="suit ${i%4===1||i%4===2?'r':''}">${SUITS[i%4]}</span><div class="dept" style="color:${d.c}">${d.n} ${Flow.scenTags(REQ[p.d])}</div><h4>${p.t}</h4><p>${p.p}</p>
      <div class="pst"><em>${SL[REQ[p.d].st?REQ[p.d].st.status:'DRAFT']}</em><span>${filledK(p.d)} of ${REQ[p.d].need} filled</span></div><div class="pbar"><u style="width:${filledK(p.d)/REQ[p.d].need*100}%"></u></div>
      <div class="acts"><button class="ok">${REQ[p.d].st&&REQ[p.d].st.status!=='DRAFT'?'Continue':'Review'}</button><button class="rv">Show lane</button><div class="tok">${Array.from({length:Math.min(p.tok,6)},()=>`<span class="tk" style="--c:${d.c}"></span>`).join('')}${p.tok>6?`<span style="font-size:11px;opacity:.6;align-self:center">+${p.tok-6}</span>`:''}</div></div>`;
     el.querySelector('.ok').onclick=e=>{e.stopPropagation();review(p.d)};

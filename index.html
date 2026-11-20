@@ -25,7 +25,9 @@ a.card.big{grid-row:span 2;min-height:620px}
 .row2{display:flex;gap:10px;position:relative;margin-top:14px}
 .row2 span{font-size:12px;font-weight:700;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.1)}
 .row2 span:hover{background:rgba(255,255,255,.2)}
-a.card.std{color:#0f2233;border-color:#d9e3ec;background:#eef3f8}a.card.std .tag,a.card.std p{opacity:.8}a.card.std:hover{border-color:#93c5fd}
+a.card.std{color:#0f2233;border-color:#d9e3ec;background:#eef3f8}
+.std2 span{background:#fff;color:#0f2233;border:1px solid #d9e3ec;font-weight:700}.std2 span:hover{background:#e0f2fe}.std2 span.dk{background:#0f1726;color:#e6edf6;border-color:#0f1726}.std2 span.dk:hover{background:#1e293b}
+a.card.std{cursor:default}a.card.std .tag,a.card.std p{opacity:.8}a.card.std:hover{border-color:#93c5fd}
 h3.sec{font-family:Manrope;font-size:15px;letter-spacing:1.4px;text-transform:uppercase;opacity:.55;margin-top:46px}
 .grid.r1{grid-template-columns:1fr 1fr 1fr;margin-top:14px}
 a.card.r1c{min-height:170px;opacity:.85}
@@ -58,7 +60,7 @@ a.card.r1c{min-height:170px;opacity:.85}
     <a class="card" href="v1-disk/index.html">
       <svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><rect width="400" height="300" fill="#1b2036"/><g transform="translate(200,140)"><circle r="96" fill="none" stroke="#e5b84a" stroke-width="28" stroke-dasharray="120 484"/><circle r="96" fill="none" stroke="#8b5cf6" stroke-width="28" stroke-dasharray="190 414" stroke-dashoffset="-122"/><circle r="96" fill="none" stroke="#22d3ee" stroke-width="28" stroke-dasharray="170 434" stroke-dashoffset="-314"/><circle r="96" fill="none" stroke="#f97316" stroke-width="28" stroke-dasharray="100 504" stroke-dashoffset="-486"/><circle r="62" fill="none" stroke="#e5b84a" stroke-width="30" stroke-dasharray="80 310" opacity=".8"/><circle r="62" fill="none" stroke="#8b5cf6" stroke-width="30" stroke-dasharray="120 270" stroke-dashoffset="-82" opacity=".8"/><circle r="62" fill="none" stroke="#22d3ee" stroke-width="30" stroke-dasharray="110 280" stroke-dashoffset="-204" opacity=".8"/><circle r="62" fill="none" stroke="#f97316" stroke-width="30" stroke-dasharray="76 314" stroke-dashoffset="-316" opacity=".8"/><rect x="-4" y="-150" width="8" height="34" fill="#ff2d55"/><rect x="100" y="-30" width="34" height="8" fill="#ff2d55"/></g></svg>
       <div class="tag">Version 1 · Abstract · Draft B</div><h2>Coverage Rings</h2><p>The whole resort as one ring chart. Click any slice to zoom into it. Red spikes are open shifts.</p><div class="go">Open →</div></a>
-    <a class="card std" href="standard/index.html" style="grid-column:2 / span 2;min-height:300px">
+    <a class="card std" href="standard/index.html#light" style="grid-column:2 / span 2;min-height:300px">
       <svg class="art" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid slice"><rect width="760" height="300" fill="#eef3f8"/>
         <g transform="translate(150,34) skewY(-2)"><rect width="460" height="210" rx="14" fill="#fff" stroke="#d9e3ec"/>
           <rect x="18" y="16" width="120" height="10" rx="5" fill="#0f2233" opacity=".8"/><rect x="18" y="34" width="200" height="7" rx="3.5" fill="#94a3b8" opacity=".6"/>
@@ -71,7 +73,7 @@ a.card.r1c{min-height:170px;opacity:.85}
             <rect x="30" y="182" width="100" height="8" rx="4" fill="#334155" opacity=".7"/><rect x="230" y="182" width="80" height="8" rx="4" fill="#0ea5a4" opacity=".5"/><rect x="370" y="179" width="56" height="16" rx="8" fill="#e2e8f0"/></g></g>
         <g opacity=".55"><rect x="20" y="70" width="110" height="160" rx="12" fill="#fff" stroke="#d9e3ec" transform="skewY(6)"/><rect x="630" y="70" width="110" height="160" rx="12" fill="#fff" stroke="#d9e3ec" transform="skewY(-6) translate(0,80)"/></g>
         <rect y="180" width="760" height="120" fill="url(#sfade)"/><defs><linearGradient id="sfade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef3f8" stop-opacity="0"/><stop offset="1" stop-color="#eef3f8"/></linearGradient></defs></svg>
-      <div class="tag">Version 3 · Standard</div><h2>Standard</h2><p>A generic, clinical version with no industry theme. Tables, filters and bulk actions, with Day, Week and Month views. Our safe option.</p><div class="go">Open →</div></a>
+      <div class="tag">Version 3 · Standard</div><h2>Standard</h2><p>A generic, clinical version with no industry theme. Tables, filters and bulk actions, with Day, Week and Month views. Our safe option.</p><div class="row2 std2"><span onclick="event.preventDefault();location.href='standard/index.html#light'">☀ Open light mode</span><span class="dk" onclick="event.preventDefault();location.href='standard/index.html#dark'">☾ Open dark mode</span></div></a>
   </div>
   <h3 class="sec">Round 1</h3>
   <div class="grid r1">

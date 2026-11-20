@@ -7,7 +7,7 @@ Static site, no build step. Open `index.html` for the version picker.
 | `v2-resort/` | **V2 · The Resort.** Game-like isometric resort hub with a "Needs you" mission board. Drill into Casino Floor (felt table, embeds `classic/`), Hotel (elevator), Ember & Oak (fine dining), Resort Shop (storefront) and Back of House (ops console). **Resort setup** (top bar) connects a dummy org chart, maps departments to themed worlds, and shapes which buildings appear on the map. |
 | `v1-pulse/` | **V1 Draft A · Resort Pulse.** Abstract dark glass. Departments as lanes of light across Saturday; gaps crack the line. |
 | `v1-disk/` | **V1 Draft B · Coverage Rings.** DaisyDisk-style sunburst: resort > division > department > role > shift. Click to zoom, red spikes are open shifts. |
-| `standard/` | **V3 · Standard.** Generic, white and clinical, no industry theme. Carousel navigation with tables, filters and bulk actions, plus Day, Week and Month views (month shows patterns; projected gaps after the published schedule). |
+| `standard/` | **V3 · Standard.** Generic, white and clinical, no industry theme. Carousel navigation with tables, filters and bulk actions, plus Day, Week and Month views (month shows patterns; projected gaps after the published schedule). Open with `#light` or `#dark`. |
 | `classic/` | **Round 1.** Casino-only and Healthcare themes. `#casino`, `#healthcare`. `#embed` is used by V2. |
 
 Shared: `gate.js` (password prompt), `face.js` (the agent's animated face).

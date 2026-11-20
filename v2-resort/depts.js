@@ -32,7 +32,7 @@ function railHTML(){const scr=document.getElementById('dept').className.replace(
     const lab=isReq(m)?(dn?(st.status==='FILLED'?'Filled':'Unable to fill'):st?SLBL[st.status]||'Draft':'Draft'):(dn?'Decided':KIND[m.kind]);
     const cls=dn?'ok':isReq(m)?(st&&st.status==='PENDING_APPROVAL'?'wait':st&&st.status!=='DRAFT'?'live':'draft'):'warn';
     return `<div class="rc ${dn?'done':''}" data-m="${m.id}"><div class="rt"><i style="background:${d.c}"></i><span>${d.n}</span><em class="${cls}">${lab}</em></div>
-      <h5>${m.t}</h5>${dn?`<p>${isReq(m)?(st.assigned.map(c=>c.name).join(', ')||'Gap flagged to the shift lead'):STATE.choice[m.id]}</p>`:`<p>${m.p}</p>`}
+      <h5>${m.t}</h5>${isReq(m)&&!dn?`<div style="margin-top:6px">${Flow.scenTags(REQ[m.id])}</div>`:''}${dn?`<p>${isReq(m)?(st.assigned.map(c=>c.name).join(', ')||'Gap flagged to the shift lead'):STATE.choice[m.id]}</p>`:`<p>${m.p}</p>`}
       ${isReq(m)?`<div class="rbar"><u style="width:${Math.min(100,fl/m.n*100)}%"></u></div><div class="rnum"><span>${fl} of ${m.n} filled</span><span>${m.when}</span></div>`:`<div class="rnum"><span>${m.when}</span></div>`}
       ${dn?'':`<button class="rbtn" data-go="${m.id}">${isReq(m)?(st&&st.status!=='DRAFT'?'Continue':'Review'):m.kind==='change'?'Review change':'Make the call'}</button>`}</div>`};
   const ax=[6,12,18,24,28].map(h=>`<span style="left:${rx(h)}%">${h===24?'12a':h>24?(h-24)+'a':h===12?'12p':h>12?(h-12)+'p':h+'a'}</span>`).join('');
@@ -40,7 +40,7 @@ function railHTML(){const scr=document.getElementById('dept').className.replace(
     const R=REQ[kk];if(!R)return base;const [a,b]=whenHrs(R.when);const add=asg(kk).map(c=>({n:c.name,r:'Assigned · '+(typeof FROM!=='undefined'&&FROM[c.from]?FROM[c.from]:c.from),a,b,t:'new'}));
     const m=MISSIONS.find(m=>m.id===kk);const open=m&&on(m.d)&&!isDone(kk)?Math.max(0,m.n-filledOf(m)):0;
     return add.concat(open?[{n:`Open ×${open}`,r:R.role,a,b,t:'open'}]:[]).concat(base)});
-  return `<aside class="rail2" id="rail2"><div class="rh"><span class="faceHost rf">${agentFace()}</span><div><b>Coverage agent</b><small>${live.length?`${live.length} ${live.length>1?'things need':'thing needs'} you here`:'All covered here. I’ll flag changes.'}</small></div></div>
+  return `<aside class="rail2" id="rail2"><div class="rh"><span class="faceHost rf">${agentFace()}</span><div><b>Shifty</b><small>${live.length?`${live.length} ${live.length>1?'things need':'thing needs'} you here`:'All covered here. I’ll flag changes.'}</small></div></div>
     <div class="rsec">Needs you here</div><div class="rcards">${ms.length?ms.sort((a,b)=>isDone(a.id)-isDone(b.id)).map(card).join(''):`<div class="rc done"><h5>Nothing open</h5><p>No gaps or conflicts on Saturday.</p></div>`}</div>
     <div class="rsec">On shift · Saturday <small>6a to 4a</small></div><div class="rax">${ax}</div>
     <div class="rros">${rows.map(r=>`<div class="rr ${r.t}"><div class="nm">${r.n}<small>${r.r}</small></div><div class="tr"><u style="left:${rx(r.a)}%;width:${rx(r.b)-rx(r.a)}%"></u></div></div>`).join('')}</div></aside>`}

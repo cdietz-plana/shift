@@ -113,3 +113,25 @@ DM.on(()=>{dmRefresh();toast(DM.roster?'Roster only: schedule, template, callout
 .hkp small{font-size:11px;color:#7a6a4f;width:80px}.hkp b{font-family:'Playfair Display';font-size:16px;flex:1}.hkp em{font-style:normal;font-size:11.5px;color:#0f766e;font-weight:700}
 .hud-top .dmT{margin-right:10px}
 #dept .dchrome .dmT{margin-left:4px}`;document.head.appendChild(st)})();
+
+/* ===== demo guide: presenter shortcuts to the moments worth showing ===== */
+function demoGuide(){let g=document.getElementById('dguide');if(g){g.remove();return}g=document.createElement('div');g.id='dguide';g.className='dguide';
+  const reqDone=id=>REQ[id]&&REQ[id].st&&['FILLED','UNABLE_TO_FILL'].includes(REQ[id].st.status);
+  const items=[['⚖','Your call: Casino Floor','3 dealers say yes for 2 Baccarat tables. Policy: avoid overtime.',()=>openFlow('casino'),reqDone('casino')],
+    ['⚖','Your call: Ember & Oak','3 servers say yes for 2 sections. Union seniority decides.',()=>openFlow('steak'),reqDone('steak')],
+    ['＋','Bonus round: Bell & Valet','Only 4 of 6 fill. A $75 bonus needs a second manager, then a second round.',()=>openFlow('valet'),reqDone('valet')],
+    ['⇄','Decision: Jane Doe wanted twice','Front Desk and Ember & Oak both want her.',()=>decision(MISSIONS.find(m=>m.id==='jane')),isDone('jane')],
+    ['⇄','Decision: Drew Singh double-booked','Slot Ops and Grounds both have him.',()=>decision(MISSIONS.find(m=>m.id==='slots')),isDone('slots')],
+    ['▦','Run the whole plan','All 8 requests together: confirm, send, replies, assign.',approvePlan,!MISSIONS.some(m=>isReq(m)&&mlive(m)&&(!stOf(m)||stOf(m).status==='DRAFT'))],
+    ['🏨','Inside a department','Same layout everywhere, themed stage. Try the Hotel elevator.',()=>openDept('front'),false],
+    ['⚙','Resort setup · look & feel','Upload a photo of their property and the map restyles.',()=>{openSetup();Object.keys(DEPTS).forEach(k=>SU.draft[k]=MAP[k]);SU.step=3;suRender()},false]];
+  g.innerHTML=`<h4>Demo scenarios</h4><p>Jump straight to the moments worth showing. Purple “Your call” and orange “Bonus round” tags mark them on the board too.</p>
+   ${items.map(([ic,t,d,f,dn],i)=>`<div class="gi"><span class="ic">${ic}</span><div class="tx"><b>${t}</b><small>${d}</small></div><button class="btn ${dn?'g':'w'}" data-g="${i}">${dn?'Done ✓':'Go'}</button></div>`).join('')}`;
+  document.getElementById('app').appendChild(g);
+  g.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{g.remove();const k=+b.dataset.g;if(k<6&&document.getElementById('dept').classList.contains('show'))closeDept();setTimeout(items[k][3],k<6?50:0)});
+  setTimeout(()=>document.addEventListener('click',function c(e){if(!g.contains(e.target)&&e.target.id!=='guideBtn'){g.remove();document.removeEventListener('click',c)}}),0)}
+(function(){const st=document.createElement('style');st.textContent=`.dguide{position:absolute;right:24px;top:84px;width:430px;z-index:450;border-radius:22px;padding:18px 18px 10px;background:linear-gradient(170deg,#171a30,#0d0f1e);border:1px solid rgba(255,255,255,.14);color:#eef0ff;box-shadow:0 30px 70px rgba(0,0,0,.55);font-family:Inter,sans-serif;animation:fadeIn .25s both}
+ .dguide h4{font-size:15px}.dguide>p{font-size:12px;opacity:.6;margin:3px 0 10px;line-height:1.45}
+ .dguide .gi{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid rgba(255,255,255,.08)}.dguide .tx{flex:1}.dguide b{display:block;font-size:13px}.dguide small{display:block;font-size:11.5px;opacity:.6;line-height:1.4;margin-top:1px}
+ .dguide .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:14px;flex:0 0 30px;background:rgba(255,255,255,.07)}
+ .dguide .btn{padding:7px 12px;font-size:12px}`;document.head.appendChild(st)})();
